@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S-VYASA | Class Time Table — V Semester CSE (Sec-E)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7A1F2B">
+<link rel="icon" href="favicon-48.png" sizes="48x48" type="image/png">
+<link rel="icon" href="icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SVYASA Timetable">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+
+<style>
+  :root{
+    --maroon:#7A1F2B;
+    --maroon-deep:#571620;
+    --cream:#FBF6EF;
+    --ink:#2B2320;
+    --gold:#B8862E;
+    --line:#E4D9C8;
+    --slate:#5B6472;
+
+    /* subject colors */
+    --c-ai:#7A1F2B;
+    --c-toc:#1F5E7A;
+    --c-bda:#8A5A1F;
+    --c-ds:#2E6B4F;
+    --c-nms:#6B4B8A;
+    --c-dbms:#B8862E;
+    --c-dwm:#3D6B6B;
+    --c-mgmt:#8A3B5C;
+    --c-lab:#B8862E;
+    --c-oe:#5B6472;
+    --c-misc:#9A9186;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 500px at 10% -10%, #F3E7D3 0%, transparent 60%),
+      var(--cream);
+    font-family:'Poppins',sans-serif;
+    color:var(--ink);
+    padding:40px 20px 70px;
+  }
+
+  .sheet{
+    max-width:1280px;
+    margin:0 auto;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -25px rgba(87,22,32,0.25);
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    background:linear-gradient(135deg,var(--maroon) 0%,var(--maroon-deep) 100%);
+    color:#fff;
+    padding:12px 36px 10px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    right:-60px; top:-60px;
+    width:260px; height:260px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.12);
+  }
+  header::before{
+    content:"";
+    position:absolute;
+    right:20px; top:-20px;
+    width:180px; height:180px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.1);
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .brand .mark{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:3px;
+    color:#E8C88A;
+    border:1px solid rgba(232,200,138,0.5);
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  h1{
+    font-family:'Lora',serif;
+    font-weight:700;
+    font-size:30px;
+    margin:6px 0 2px;
+    letter-spacing:0.5px;
+  }
+  .sub{
+    font-size:14.5px;
+    color:#EBD8C4;
+    max-width:520px;
+    line-height:1.5;
+  }
+  .install-btn{
+    position:absolute;
+    top:34px; right:44px;
+    z-index:3;
+    display:none;
+    align-items:center; gap:8px;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(232,200,138,0.5);
+    color:#F3E7D3;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px;
+    padding:9px 14px; border-radius:999px;
+    cursor:pointer;
+    transition:background .15s ease;
+  }
+  .install-btn.show{display:inline-flex;}
+  .install-btn:hover{background:rgba(255,255,255,0.22);}
+  .install-btn svg{width:14px; height:14px;}
+  @media (max-width:720px){
+    .install-btn{position:static; margin-top:16px;}
+  }
+  .meta-grid{
+    margin-top:14px;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(160px,1fr));
+    gap:14px 28px;
+    position:relative;
+    z-index:2;
+  }
+  .meta-grid div{font-size:12.5px;color:#E8C88A;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+  .meta-grid strong{display:block;font-size:15px;color:#fff;font-weight:600;letter-spacing:0;text-transform:none;margin-top:2px;}
+
+  /* ---------- TABLE ---------- */
+  .table-wrap{padding:14px 26px 2px;overflow-x:auto;}
+  .table-wrap table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    min-width:1080px;
+  }
+  thead th{
+    background:var(--maroon);
+    color:#fff;
+    font-family:'Space Mono',monospace;
+    font-weight:400;
+    font-size:11.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:6px 5px;
+    text-align:center;
+    border-right:1px solid rgba(255,255,255,0.15);
+  }
+  thead th:first-child{border-top-left-radius:10px;}
+  thead th:last-child{border-top-right-radius:10px; border-right:none;}
+  thead .time{font-family:'Poppins',sans-serif;font-weight:700;font-size:12.5px;display:block;letter-spacing:0.3px;text-transform:none;margin-top:2px;}
+
+  tbody th{
+    background:#F6ECDD;
+    color:var(--maroon-deep);
+    font-family:'Lora',serif;
+    font-weight:600;
+    font-size:14px;
+    text-align:center;
+    padding:6px 6px;
+    border-bottom:1px solid var(--line);
+    border-right:1px solid var(--line);
+    letter-spacing:0.5px;
+  }
+  td{
+    border-bottom:1px solid var(--line);
+    border-right:1px solid var(--line);
+    padding:5px 6px;
+    vertical-align:middle;
+    text-align:center;
+    font-size:12.6px;
+  }
+  td:last-child{border-right:none;}
+  tbody tr:nth-child(even) td, tbody tr:nth-child(even) th{background:#FCF9F4;}
+  tbody tr:last-child td, tbody tr:last-child th{border-bottom:none;}
+
+  .brk{
+    background:repeating-linear-gradient(135deg,#F1E7D8,#F1E7D8 6px,#EADFCB 6px,#EADFCB 12px)!important;
+    width:14px;
+    padding:0!important;
+  }
+
+  .chip{
+    display:block;
+    border-radius:9px;
+    padding:5px 6px 5px;
+    color:#fff;
+    line-height:1.28;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.15);
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .chip:hover{transform:translateY(-1px); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.3), 0 4px 10px -4px rgba(0,0,0,0.35);}
+  .chip:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
+  .chip .name{display:block;font-weight:700;font-size:11.6px;letter-spacing:0.1px;line-height:1.2;}
+  .chip .fac{display:block;font-size:9.8px;opacity:0.92;margin-top:1px;font-weight:500;}
+  .chip .room{display:inline-block;margin-top:4px;font-family:'Space Mono',monospace;font-size:9.5px;background:rgba(255,255,255,0.18);padding:1px 6px;border-radius:5px;}
+
+  .chip.stack{padding:6px 6px 6px;}
+  .chip.stack .name{font-size:11.6px;}
+  .two-slot{display:flex;flex-direction:column;gap:5px;}
+
+  .plain{
+    color:var(--slate);
+    font-weight:600;
+    font-size:12.5px;
+    font-family:'Lora',serif;
+    font-style:italic;
+  }
+  .oe .chip, .plain.oe{background:var(--c-oe);}
+  td .plain.oe{background:none;color:var(--maroon);font-weight:700;font-style:normal;}
+
+  .empty-note{
+    max-width:1080px;margin:0 auto;padding:0 30px 2px;
+    font-size:10px;color:var(--slate);
+  }
+
+  /* ---------- LEGEND / COURSE TABLE ---------- */
+  .legend-section{padding:0px 36px 10px;}
+  .legend-title{
+    font-family:'Lora',serif;
+    font-size:16px;
+    color:var(--maroon-deep);
+    margin:4px 0 5px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .legend-title::before{content:"";width:22px;height:2px;background:var(--gold);display:inline-block;}
+
+  .course-table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;}
+  .course-table th{
+    text-align:left;background:#F6ECDD;color:var(--maroon-deep);
+    font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;
+    padding:3px 14px;border-bottom:2px solid var(--maroon);
+  }
+  .course-table td{padding:3px 14px;border-bottom:1px solid var(--line);word-break:break-word;}
+  .course-table tr:hover td{background:#FBF3E8;}
+  .swatch{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:9px;vertical-align:-1px;}
+
+  .removed-note{
+    margin:5px 0 0;
+    padding:6px 14px;
+    background:#FBF0EE;
+    border:1px solid #E7CFCB;
+    border-radius:10px;
+    font-size:12.5px;
+    color:#8A3B34;
+    line-height:1.4;
+  }
+  .removed-note strong{color:var(--maroon-deep);}
+
+  footer{
+    display:flex;
+    justify-content:space-between;
+    padding:0px 36px 4px;
+    border-top:1px dashed var(--line);
+    flex-wrap:wrap;
+    gap:18px;
+  }
+  footer div{font-size:12.5px;color:var(--slate);}
+  footer strong{display:block;color:var(--ink);font-family:'Lora',serif;font-size:14px;margin-bottom:5px;}
+
+  @media (max-width:720px){
+    header{padding:26px 22px;}
+    h1{font-size:28px;}
+    .meta-grid{grid-template-columns:repeat(2,1fr);}
+    .legend-section, .table-wrap{padding-left:16px;padding-right:16px;}
+    footer{padding:22px;}
+    .course-table th:first-child, .course-table td:first-child{width:56%;}
+    .course-table th:last-child, .course-table td:last-child{width:44%;}
+    .course-table th, .course-table td{padding:6px 8px;font-size:10.5px;}
+  }
+
+  /* ---------- LOADER ---------- */
+  html.is-loading, html.is-loading body{overflow:hidden; height:100%;}
+  #loader{
+    position:fixed; inset:0; z-index:9999;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(184,134,46,0.18) 0%, transparent 55%),
+      linear-gradient(135deg,var(--maroon) 0%,var(--maroon-deep) 100%);
+    transition:opacity .55s ease, visibility .55s ease;
+  }
+  #loader::before{
+    content:"";
+    position:absolute; left:50%; top:50%;
+    width:340px; height:340px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.08);
+    transform:translate(-50%,-50%);
+  }
+  .loader-badge{
+    position:relative;
+    width:74px; height:74px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .loader-badge svg{width:100%; height:100%;}
+  .loader-badge circle{
+    fill:none;
+    stroke-width:2.4;
+  }
+  .loader-badge .track{stroke:rgba(255,255,255,0.16);}
+  .loader-badge .arc{
+    stroke:var(--gold);
+    stroke-linecap:round;
+    stroke-dasharray:150;
+    stroke-dashoffset:112;
+    transform-origin:50% 50%;
+    animation:loader-spin 1.1s linear infinite;
+  }
+  .loader-badge .initial{
+    position:absolute;
+    font-family:'Lora',serif;
+    font-weight:700;
+    font-size:20px;
+    color:#F3E7D3;
+    letter-spacing:0.5px;
+  }
+  @keyframes loader-spin{to{transform:rotate(360deg);}}
+
+  .loader-mark{
+    font-family:'Space Mono',monospace;
+    font-size:12px; letter-spacing:4px;
+    color:#E8C88A; text-transform:uppercase;
+  }
+  .loader-text{
+    font-family:'Poppins',sans-serif;
+    font-size:12.5px; color:#EBD8C4;
+    display:flex; align-items:center; gap:7px;
+  }
+  .loader-dots span{
+    display:inline-block; width:4px; height:4px; margin-left:3px;
+    border-radius:50%; background:#EBD8C4;
+    animation:loader-bounce 1.2s ease-in-out infinite;
+  }
+  .loader-dots span:nth-child(2){animation-delay:.15s;}
+  .loader-dots span:nth-child(3){animation-delay:.3s;}
+  @keyframes loader-bounce{0%,80%,100%{opacity:.25; transform:translateY(0);} 40%{opacity:1; transform:translateY(-3px);}}
+
+  .loader-bar{
+    width:130px; height:2px; border-radius:2px;
+    background:rgba(255,255,255,0.14);
+    overflow:hidden;
+  }
+  .loader-bar::after{
+    content:""; display:block; width:40%; height:100%;
+    background:var(--gold); border-radius:2px;
+    animation:loader-slide 1.15s ease-in-out infinite;
+  }
+  @keyframes loader-slide{
+    0%{transform:translateX(-100%);}
+    50%{transform:translateX(130%);}
+    100%{transform:translateX(130%);}
+  }
+
+  .loader-credit{
+    position:absolute;
+    bottom:34px;
+    font-family:'Space Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:rgba(235,216,196,0.55);
+  }
+
+  #loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    .loader-badge .arc{animation:none;}
+    .loader-dots span{animation:none; opacity:.7;}
+    .loader-bar::after{animation:none; width:100%;}
+  }
+
+  /* ---------- SUBJECT MODAL ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:5000;
+    background:rgba(43,35,32,0.55);
+    display:flex; align-items:center; justify-content:center;
+    padding:20px;
+    opacity:0; visibility:hidden;
+    transition:opacity .25s ease, visibility .25s ease;
+  }
+  .modal-overlay.open{opacity:1; visibility:visible;}
+  .modal-card{
+    background:#fff;
+    width:100%; max-width:380px;
+    border-radius:16px;
+    padding:26px 24px 22px;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(43,35,32,0.4);
+    transform:translateY(8px) scale(0.98);
+    transition:transform .25s ease;
+  }
+  .modal-overlay.open .modal-card{transform:translateY(0) scale(1);}
+  .modal-close{
+    position:absolute; top:14px; right:14px;
+    width:28px; height:28px; border-radius:50%;
+    border:none; background:#F6ECDD; color:var(--maroon-deep);
+    font-size:16px; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .modal-close:hover{background:#EFE0C9;}
+  .modal-swatch{
+    width:38px; height:38px; border-radius:10px; margin-bottom:16px;
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Lora',serif; font-weight:700; font-size:16px;
+  }
+  .modal-card h3{
+    font-family:'Lora',serif; font-size:19px; margin:0 0 4px; color:var(--ink);
+  }
+  .modal-card .modal-fac{font-size:13px; color:var(--slate); margin:0 0 20px;}
+  .modal-section-label{
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--slate); margin:0 0 8px;
+  }
+  .modal-links{display:flex; flex-direction:column; gap:10px; margin-bottom:6px;}
+  .modal-btn{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 13px; border-radius:12px;
+    background:#F9F4EB; color:var(--ink);
+    text-decoration:none; border:1px solid var(--line);
+    transition:background .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .modal-btn:hover{background:#F3E8D4; border-color:#E0CFAE; transform:translateY(-1px);}
+  .modal-btn-icon{
+    flex:none; width:34px; height:34px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center;
+    background:#fff; border:1px solid var(--line);
+    font-size:16px;
+  }
+  .modal-btn-icon svg{width:16px; height:16px;}
+  .modal-btn-text{flex:1; min-width:0;}
+  .modal-btn-title{
+    display:block;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:13px; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .modal-btn-sub{
+    display:block;
+    font-family:'Poppins',sans-serif; font-size:11px; color:var(--slate); margin-top:1px;
+  }
+  .modal-btn .arrow{font-size:15px; opacity:.45; flex:none;}
+  .modal-btn.disabled{
+    opacity:.5; cursor:not-allowed; pointer-events:none;
+  }
+  .modal-hint{
+    margin:14px 0 0; font-size:11px; color:var(--slate); line-height:1.5;
+  }
+
+  /* ---------- NOTES / MODULE PAGE ---------- */
+  .notes-page{
+    position:fixed; inset:0; z-index:6000;
+    background:var(--cream);
+    overflow-y:auto;
+    transform:translateX(100%);
+    transition:transform .38s cubic-bezier(.2,.8,.2,1);
+  }
+  .notes-page.open{transform:translateX(0);}
+  .notes-header{
+    background:linear-gradient(135deg,var(--maroon) 0%,var(--maroon-deep) 100%);
+    color:#fff;
+    padding:22px 24px 26px;
+    position:sticky; top:0; z-index:2;
+    display:flex; align-items:flex-start; gap:14px;
+  }
+  .notes-back{
+    flex:none;
+    width:36px; height:36px; border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(255,255,255,0.2);
+    color:#fff; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px;
+    transition:background .15s ease;
+  }
+  .notes-back:hover{background:rgba(255,255,255,0.22);}
+  .notes-header-text{flex:1; min-width:0;}
+  .notes-eyebrow{
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:2px;
+    text-transform:uppercase; color:#E8C88A; margin:0 0 6px;
+  }
+  .notes-title{
+    font-family:'Lora',serif; font-weight:700; font-size:23px; margin:0 0 4px; color:#fff;
+    line-height:1.25;
+  }
+  .notes-sub{font-size:12.5px; color:#EBD8C4; margin:0;}
+
+  .notes-body{padding:26px 24px 60px; max-width:560px; margin:0 auto;}
+  .notes-section-label{
+    font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--slate); margin:0 0 14px;
+  }
+  .module-list{position:relative; margin:0 0 34px;}
+  .module-item{
+    position:relative;
+    display:flex; align-items:center; gap:14px;
+    width:100%; text-align:left;
+    appearance:none; -webkit-appearance:none;
+    font:inherit;
+    text-decoration:none; color:var(--ink);
+    padding:13px 14px;
+    border-radius:13px;
+    background:#fff;
+    border:1px solid var(--line);
+    margin-bottom:10px;
+    cursor:pointer;
+    transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
+  }
+  .module-item.available:hover{
+    border-color:#D9C39A;
+    transform:translateX(3px);
+    box-shadow:0 8px 20px -12px rgba(87,22,32,0.3);
+  }
+  .module-item.locked{cursor:not-allowed;}
+  .module-badge{
+    flex:none;
+    width:36px; height:36px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Lora',serif; font-weight:700; font-size:14px;
+    background:#F6ECDD; color:var(--maroon-deep);
+  }
+  .module-item.available .module-badge{background:var(--maroon); color:#fff;}
+  .module-text{flex:1; min-width:0;}
+  .module-name{display:block; font-family:'Poppins',sans-serif; font-weight:600; font-size:14px;}
+  .module-status{display:block; font-size:11px; color:var(--slate); margin-top:1px;}
+  .module-item.available .module-status{color:#2E6B4F;}
+  .module-chevron{flex:none; font-size:16px; color:var(--slate); opacity:.5;}
+  .module-item.available .module-chevron{color:var(--maroon); opacity:.8;}
+
+  .qb-card{
+    display:flex; align-items:center; gap:14px;
+    width:100%; text-align:left;
+    appearance:none; -webkit-appearance:none;
+    font:inherit;
+    text-decoration:none; color:var(--ink);
+    padding:15px 16px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#FBF3E1 0%,#F6E8CB 100%);
+    border:1px solid #E9D4A6;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .qb-card:disabled{cursor:not-allowed;}
+  .qb-card.available:hover{transform:translateX(3px); box-shadow:0 8px 20px -12px rgba(184,134,46,0.4);}
+  .qb-badge{
+    flex:none; width:40px; height:40px; border-radius:11px;
+    background:var(--gold); color:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+  }
+  .qb-text{flex:1; min-width:0;}
+  .qb-name{display:block; font-family:'Poppins',sans-serif; font-weight:700; font-size:14.5px; color:#6B4B12;}
+  .qb-status{display:block; font-size:11.5px; color:#8A6A28; margin-top:1px;}
+  .qb-chevron{flex:none; font-size:16px; color:#8A6A28;}
+
+  /* ---------- IN-SITE DOCUMENT VIEWER ---------- */
+  .viewer-page{
+    position:fixed; inset:0; z-index:7000;
+    background:#fff;
+    display:flex; flex-direction:column;
+    transform:translateY(100%);
+    transition:transform .4s cubic-bezier(.2,.8,.2,1);
+  }
+  .viewer-page.open{transform:translateY(0);}
+  .viewer-header{
+    flex:none;
+    display:flex; align-items:center; gap:12px;
+    padding:14px 18px;
+    background:#fff;
+    border-bottom:1px solid var(--line);
+    box-shadow:0 2px 10px -6px rgba(43,35,32,0.15);
+    z-index:2;
+  }
+  .viewer-back{
+    flex:none;
+    width:34px; height:34px; border-radius:50%;
+    background:#F6ECDD; border:none; color:var(--maroon-deep);
+    cursor:pointer; font-size:16px;
+    display:flex; align-items:center; justify-content:center;
+    transition:background .15s ease;
+  }
+  .viewer-back:hover{background:#EFE0C9;}
+  .viewer-titles{flex:1; min-width:0;}
+  .viewer-title{
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:14px; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+  }
+  .viewer-sub{font-size:11px; color:var(--slate); margin-top:1px;}
+  .viewer-open-external{
+    flex:none;
+    display:flex; align-items:center; gap:6px;
+    font-family:'Poppins',sans-serif; font-size:12px; font-weight:600;
+    color:var(--maroon-deep); text-decoration:none;
+    background:#F6ECDD; padding:8px 12px; border-radius:9px;
+    border:1px solid var(--line);
+    transition:background .15s ease;
+  }
+  .viewer-open-external:hover{background:#EFE0C9;}
+  .viewer-body{flex:1; position:relative; background:#F3EEE4;}
+  .viewer-body iframe{
+    width:100%; height:100%; border:none; display:block;
+    position:relative; z-index:1;
+  }
+  .viewer-loading{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:12px; z-index:0;
+    transition:opacity .3s ease, visibility .3s ease;
+  }
+  .viewer-loading.hidden{opacity:0; visibility:hidden;}
+  .viewer-spinner{
+    width:32px; height:32px; border-radius:50%;
+    border:3px solid var(--line); border-top-color:var(--maroon);
+    animation:viewer-spin .8s linear infinite;
+  }
+  @keyframes viewer-spin{to{transform:rotate(360deg);}}
+  .viewer-loading-text{font-size:12.5px; color:var(--slate); font-family:'Poppins',sans-serif;}
+  .viewer-fallback{
+    position:absolute; left:50%; bottom:22px; transform:translateX(-50%);
+    font-size:11.5px; color:var(--slate); text-align:center;
+    background:#fff; padding:8px 14px; border-radius:999px;
+    border:1px solid var(--line); box-shadow:0 6px 16px -8px rgba(43,35,32,0.25);
+    z-index:2;
+  }
+  .viewer-fallback a{color:var(--maroon-deep); font-weight:600; text-decoration:none;}
+  @media (prefers-reduced-motion: reduce){
+    .viewer-spinner{animation:none; border-top-color:var(--line);}
+  }
+</style>
+</head>
+<body>
+
+
+<div id="loader" role="status" aria-live="polite">
+  <div class="loader-badge">
+    <svg viewBox="0 0 80 80">
+      <circle class="track" cx="40" cy="40" r="24"></circle>
+      <circle class="arc" cx="40" cy="40" r="24"></circle>
+    </svg>
+    <span class="initial">S</span>
+  </div>
+  <div class="loader-mark">S – V Y A S A</div>
+  <div class="loader-text">Loading timetable<span class="loader-dots"><span></span><span></span><span></span></span></div>
+  <div class="loader-bar"></div>
+  <div class="loader-credit">Made by Ziyadh</div>
+</div>
+
+<div class="sheet">
+
+  <header>
+    <div class="brand">
+      <span class="mark">S–VYASA</span>
+      <span style="font-size:12px;color:#EBD8C4;">Deemed to be University u/s 3 of UGC Act, 1956</span>
+    </div>
+    <button type="button" class="install-btn" id="installBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      Install App
+    </button>
+    <h1>Class Time Table</h1>
+    <div class="sub">School of Engineering &amp; Technology — Swami Vivekananda Yoga Anusandhana Samsthana</div>
+
+    <div class="meta-grid">
+      <div>Semester<strong>V Semester</strong></div>
+      <div>Academic Year<strong>2026 – 2027 (Odd)</strong></div>
+      <div>Specialization<strong>CSE (General) · Sec-E</strong></div>
+      <div>Classroom No.<strong>F-16</strong></div>
+      <div>W.E.F<strong>10 / 08 / 2026</strong></div>
+      <div>Duration<strong>—</strong></div>
+    </div>
+  </header>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:80px;">Day</th>
+        <th>9.00<span class="time">9.00 – 9.50</span></th>
+        <th>9.50<span class="time">9.50 – 10.40</span></th>
+        <th class="brk"></th>
+        <th>10.50<span class="time">10.50 – 11.40</span></th>
+        <th>11.40<span class="time">11.40 – 12.30</span></th>
+        <th class="brk"></th>
+        <th>1.10<span class="time">1.10 – 2.00</span></th>
+        <th>2.00<span class="time">2.00 – 2.50</span></th>
+        <th class="brk"></th>
+        <th>3.00<span class="time">3.00 – 3.45</span></th>
+        <th>3.45<span class="time">3.45 – 4.30</span></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- MONDAY -->
+      <tr>
+        <th>MON</th>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td class="brk"></td>
+        <td colspan="2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain oe">Open Elective</span></td>
+        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Placement Training</span></td>
+        <td><span class="plain">Placement Training</span></td>
+      </tr>
+
+      <!-- TUESDAY -->
+      <tr>
+        <th>TUE</th>
+        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Placement Training</span></td>
+        <td><span class="plain">Placement Training</span></td>
+      </tr>
+
+      <!-- WEDNESDAY -->
+      <tr>
+        <th>WED</th>
+        <td colspan="2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain oe">Open Elective</span></td>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Mentoring</span></td>
+        <td><span class="plain">Sports</span></td>
+      </tr>
+
+      <!-- THURSDAY -->
+      <tr>
+        <th>THU</th>
+        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td class="brk"></td>
+        <td colspan="2"><span class="chip" style="background:var(--c-lab)"><span class="name">Database Mgmt System — Lab</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td><span class="plain">Club Activity</span></td>
+      </tr>
+
+      <!-- FRIDAY -->
+      <tr>
+        <th>FRI</th>
+        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Library</span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain oe">Open Elective</span></td>
+        <td><span class="plain">Mentoring</span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td><span class="plain">Club Activity</span></td>
+      </tr>
+
+      <!-- SATURDAY -->
+      <tr>
+        <th>SAT</th>
+        <td><span class="plain">Club Activity</span></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td class="brk"></td>
+        <td colspan="2"><span class="plain">Club Activity</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+  <div class="empty-note">Shaded diagonal columns mark short breaks between periods (10.40–10.50 &amp; 12.30–1.10, and 2.50–3.00).</div>
+
+  <div class="legend-section">
+    <div class="legend-title">Course Directory</div>
+    <table class="course-table">
+      <thead>
+        <tr><th>Course</th><th>Faculty</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="swatch" style="background:var(--c-ai)"></span>Artificial Intelligence</td><td>Ms Nidhi Singh</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-toc)"></span>Theory of Computation</td><td>Dr Ramkumar P</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-bda)"></span>Big Data Analytics</td><td>Ms. Nandini / Sugandh Kumar</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-ds)"></span>Distributed Systems</td><td>Mr. Himanshu Sahu</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-nms)"></span>Network Management Systems</td><td>Dr. Naveen N</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-dbms)"></span>Database Management System</td><td><strong>Mr Mohan Gowda G S</strong></td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-dwm)"></span>Introduction to Data Warehousing &amp; Data Mining</td><td>Dr. R Nandhi Kesavan</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-mgmt)"></span>Business Essentials for Engineers</td><td>Management Faculty</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-lab)"></span>Database Management System — Lab</td><td>Mr Mohan Gowda G S</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div><strong>Prepared By</strong>In-charge</div>
+    <div><strong>Verified and Recommended</strong>HOD / Dean</div>
+    <div><strong>Approved</strong>Director Academics</div>
+  </footer>
+
+</div>
+
+<div class="modal-overlay" id="resourceModal" role="dialog" aria-modal="true" aria-labelledby="modalCourseName">
+  <div class="modal-card">
+    <button class="modal-close" id="modalCloseBtn" aria-label="Close">&times;</button>
+    <div class="modal-swatch" id="modalSwatch"></div>
+    <h3 id="modalCourseName"></h3>
+    <p class="modal-fac" id="modalFaculty"></p>
+    <p class="modal-section-label">Resources</p>
+    <div class="modal-links">
+      <button type="button" class="modal-btn" id="modalNotes">
+        <span class="modal-btn-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="8" y1="13" x2="16" y2="13"></line><line x1="8" y1="17" x2="16" y2="17"></line></svg>
+        </span>
+        <span class="modal-btn-text">
+          <span class="modal-btn-title" id="modalNotesTitle">Notes</span>
+          <span class="modal-btn-sub" id="modalNotesSub">View modules</span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </button>
+      <button type="button" class="modal-btn" id="modalQb">
+        <span class="modal-btn-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+        </span>
+        <span class="modal-btn-text">
+          <span class="modal-btn-title" id="modalQbTitle">Question Bank</span>
+          <span class="modal-btn-sub" id="modalQbSub">Not added yet</span>
+        </span>
+        <span class="arrow">&rarr;</span>
+      </button>
+    </div>
+    <p class="modal-hint" id="modalHint"></p>
+  </div>
+</div>
+
+<div class="notes-page" id="notesPage">
+  <div class="notes-header">
+    <button type="button" class="notes-back" id="notesBackBtn" aria-label="Back to timetable">&larr;</button>
+    <div class="notes-header-text">
+      <p class="notes-eyebrow">Course Resources</p>
+      <h2 class="notes-title" id="notesPageTitle">Subject Name</h2>
+      <p class="notes-sub" id="notesPageFac">Faculty Name</p>
+    </div>
+  </div>
+  <div class="notes-body">
+    <p class="notes-section-label">Modules</p>
+    <div class="module-list" id="notesModuleList"></div>
+    <p class="notes-section-label">Question Bank</p>
+    <button type="button" class="qb-card" id="notesQbCard">
+      <span class="qb-badge">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 2-3 4"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+      </span>
+      <span class="qb-text">
+        <span class="qb-name" id="notesQbName">Question Bank</span>
+        <span class="qb-status" id="notesQbStatus">Not added yet</span>
+      </span>
+      <span class="qb-chevron">&rarr;</span>
+    </button>
+  </div>
+</div>
+
+<div class="viewer-page" id="viewerPage">
+  <div class="viewer-header">
+    <button type="button" class="viewer-back" id="viewerBackBtn" aria-label="Back">&larr;</button>
+    <div class="viewer-titles">
+      <div class="viewer-title" id="viewerTitle">Document</div>
+      <div class="viewer-sub" id="viewerSub">Loading…</div>
+    </div>
+    <a class="viewer-open-external" id="viewerExternal" href="#" target="_blank" rel="noopener">
+      Open <span aria-hidden="true">&#8599;</span>
+    </a>
+  </div>
+  <div class="viewer-body">
+    <div class="viewer-loading" id="viewerLoading">
+      <div class="viewer-spinner"></div>
+      <div class="viewer-loading-text">Loading document…</div>
+    </div>
+    <iframe id="viewerFrame" title="Document viewer"></iframe>
+    <div class="viewer-fallback">Not loading? <a id="viewerFallbackLink" href="#" target="_blank" rel="noopener">Open in Google Docs</a></div>
+  </div>
+</div>
+
+<script>
+  document.documentElement.classList.add('is-loading');
+  (function(){
+    var loader = document.getElementById('loader');
+    var minDelay = 3500;  // keep it visible for ~3-4s
+    var start = Date.now();
+
+    function reveal(){
+      var wait = Math.max(0, minDelay - (Date.now() - start));
+      setTimeout(function(){
+        document.documentElement.classList.remove('is-loading');
+        loader.classList.add('hide');
+        loader.addEventListener('transitionend', function(){ loader.remove(); }, {once:true});
+        setTimeout(function(){ if(loader.parentNode) loader.remove(); }, 700);
+      }, wait);
+    }
+
+    if (document.readyState === 'complete') reveal();
+    else window.addEventListener('load', reveal);
+  })();
+</script>
+
+<script>
+  // Fill in links per subject below.
+  // modules: up to 5 module links. Leave url:"" for a module you haven't added yet — it'll show as "Coming soon".
+  // qb: the question bank link for that subject.
+  var courseResources = {
+    "Artificial Intelligence": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: ""
+    },
+    "Theory of Computation": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: ""
+    },
+    "Big Data Analytics": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: ""
+    },
+    "Distributed Systems": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: ""
+    },
+    "Network Mgmt Systems": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: "https://docs.google.com/document/d/1u9qDnDfNVa-5XygcRvzauZXZOia98XsnRMPIJP9fCxY/edit?usp=drive_link"
+    },
+    "Database Mgmt System": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: ""
+    },
+    "Database Mgmt System — Lab": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: ""
+    },
+    "Data Warehousing & Mining": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: ""
+    },
+    "Business Essentials for Engineers": {
+      modules: [
+        { name: "Module 1", url: "" },
+        { name: "Module 2", url: "" },
+        { name: "Module 3", url: "" },
+        { name: "Module 4", url: "" },
+        { name: "Module 5", url: "" }
+      ],
+      qb: ""
+    }
+  };
+
+  (function(){
+    var modal = document.getElementById('resourceModal');
+    var closeBtn = document.getElementById('modalCloseBtn');
+    var nameEl = document.getElementById('modalCourseName');
+    var facEl = document.getElementById('modalFaculty');
+    var swatchEl = document.getElementById('modalSwatch');
+    var notesBtn = document.getElementById('modalNotes');
+    var qbBtn = document.getElementById('modalQb');
+    var qbSubEl = document.getElementById('modalQbSub');
+    var hintEl = document.getElementById('modalHint');
+
+    var notesPage = document.getElementById('notesPage');
+    var notesBackBtn = document.getElementById('notesBackBtn');
+    var notesPageTitle = document.getElementById('notesPageTitle');
+    var notesPageFac = document.getElementById('notesPageFac');
+    var notesModuleList = document.getElementById('notesModuleList');
+    var notesQbCard = document.getElementById('notesQbCard');
+    var notesQbName = document.getElementById('notesQbName');
+    var notesQbStatus = document.getElementById('notesQbStatus');
+
+    var viewerPage = document.getElementById('viewerPage');
+    var viewerBackBtn = document.getElementById('viewerBackBtn');
+    var viewerTitle = document.getElementById('viewerTitle');
+    var viewerSub = document.getElementById('viewerSub');
+    var viewerExternal = document.getElementById('viewerExternal');
+    var viewerFrame = document.getElementById('viewerFrame');
+    var viewerLoading = document.getElementById('viewerLoading');
+    var viewerFallbackLink = document.getElementById('viewerFallbackLink');
+
+    var currentSubject = '';
+    var currentFac = '';
+    var currentColor = '';
+
+    function toEmbedUrl(url){
+      var docMatch = url.match(/docs\.google\.com\/document\/d\/([a-zA-Z0-9_-]+)/);
+      if(docMatch) return 'https://docs.google.com/document/d/' + docMatch[1] + '/preview';
+
+      var sheetMatch = url.match(/docs\.google\.com\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);
+      if(sheetMatch) return 'https://docs.google.com/spreadsheets/d/' + sheetMatch[1] + '/preview';
+
+      var slideMatch = url.match(/docs\.google\.com\/presentation\/d\/([a-zA-Z0-9_-]+)/);
+      if(slideMatch) return 'https://docs.google.com/presentation/d/' + slideMatch[1] + '/embed';
+
+      var driveMatch = url.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
+      if(driveMatch) return 'https://drive.google.com/file/d/' + driveMatch[1] + '/preview';
+
+      if(url.toLowerCase().indexOf('.pdf') > -1){
+        return 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
+      }
+      return url;
+    }
+
+    function openModal(chip){
+      var nameNode = chip.querySelector('.name');
+      var facNode = chip.querySelector('.fac');
+      var name = nameNode ? nameNode.textContent.trim() : chip.textContent.trim();
+      var fac = facNode ? facNode.textContent.trim() : '';
+      var color = getComputedStyle(chip).backgroundColor;
+
+      currentSubject = name;
+      currentFac = fac;
+      currentColor = color;
+
+      var res = courseResources[name] || { modules: [], qb: "" };
+      var addedCount = (res.modules || []).filter(function(m){ return m.url; }).length + (res.qb ? 1 : 0);
+
+      nameEl.textContent = name;
+      facEl.textContent = fac;
+      swatchEl.style.background = color;
+      swatchEl.textContent = name.charAt(0);
+      qbSubEl.textContent = res.qb ? 'Available' : 'Not added yet';
+      hintEl.textContent = addedCount === 0
+        ? 'Links haven\'t been added for this subject yet.'
+        : '';
+
+      modal.classList.add('open');
+      closeBtn.focus();
+    }
+
+    function closeModal(){
+      modal.classList.remove('open');
+    }
+
+    function openViewer(title, url){
+      viewerTitle.textContent = title;
+      viewerSub.textContent = currentSubject;
+      viewerExternal.href = url;
+      viewerFallbackLink.href = url;
+      viewerLoading.classList.remove('hidden');
+      viewerFrame.src = toEmbedUrl(url);
+      viewerPage.classList.add('open');
+      history.pushState({ viewerOpen: true }, '');
+    }
+
+    function closeViewer(){
+      viewerPage.classList.remove('open');
+      setTimeout(function(){ viewerFrame.src = 'about:blank'; }, 400);
+    }
+
+    viewerFrame.addEventListener('load', function(){
+      viewerLoading.classList.add('hidden');
+    });
+
+    function buildModuleRow(mod, index){
+      var available = !!mod.url;
+      var el = document.createElement('button');
+      el.type = 'button';
+      el.className = 'module-item' + (available ? ' available' : ' locked');
+      if(!available) el.disabled = true;
+      el.innerHTML =
+        '<span class="module-badge">' + (index + 1) + '</span>' +
+        '<span class="module-text">' +
+          '<span class="module-name">' + mod.name + '</span>' +
+          '<span class="module-status">' + (available ? 'Available' : 'Coming soon') + '</span>' +
+        '</span>' +
+        '<span class="module-chevron">' + (available ? '&rarr;' : '&#9679;') + '</span>';
+      if(available){
+        el.addEventListener('click', function(){ openViewer(mod.name, mod.url); });
+      }
+      return el;
+    }
+
+    function darken(rgbStr, amount){
+      var m = rgbStr.match(/\d+/g);
+      if(!m) return rgbStr;
+      var r = Math.max(0, parseInt(m[0]) - amount);
+      var g = Math.max(0, parseInt(m[1]) - amount);
+      var b = Math.max(0, parseInt(m[2]) - amount);
+      return 'rgb(' + r + ',' + g + ',' + b + ')';
+    }
+
+    function openNotesPage(){
+      var res = courseResources[currentSubject] || { modules: [], qb: "" };
+
+      notesPageTitle.textContent = currentSubject;
+      notesPageFac.textContent = currentFac;
+      document.querySelector('.notes-header').style.background =
+        'linear-gradient(135deg,' + currentColor + ' 0%, ' + darken(currentColor, 45) + ' 100%)';
+
+      notesModuleList.innerHTML = '';
+      (res.modules || []).forEach(function(mod, i){
+        notesModuleList.appendChild(buildModuleRow(mod, i));
+      });
+
+      notesQbCard.onclick = null;
+      if(res.qb){
+        notesQbCard.classList.add('available');
+        notesQbCard.disabled = false;
+        notesQbName.textContent = 'Question Bank';
+        notesQbStatus.textContent = 'Available — tap to open';
+        notesQbCard.addEventListener('click', function(){ openViewer('Question Bank', res.qb); });
+      } else {
+        notesQbCard.classList.remove('available');
+        notesQbCard.disabled = true;
+        notesQbName.textContent = 'Question Bank';
+        notesQbStatus.textContent = 'Coming soon';
+      }
+
+      closeModal();
+      notesPage.classList.add('open');
+      notesPage.scrollTop = 0;
+      history.pushState({ notesOpen: true }, '');
+    }
+
+    function closeNotesPage(){
+      notesPage.classList.remove('open');
+    }
+
+    document.querySelectorAll('.chip').forEach(function(chip){
+      chip.setAttribute('tabindex','0');
+      chip.setAttribute('role','button');
+      chip.addEventListener('click', function(){ openModal(chip); });
+      chip.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openModal(chip); }
+      });
+    });
+
+    notesBtn.addEventListener('click', openNotesPage);
+    qbBtn.addEventListener('click', function(){
+      openNotesPage();
+      setTimeout(function(){ notesQbCard.scrollIntoView({ behavior:'smooth', block:'center' }); }, 380);
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+    notesBackBtn.addEventListener('click', function(){ history.back(); });
+    viewerBackBtn.addEventListener('click', function(){ history.back(); });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape'){ closeModal(); closeNotesPage(); closeViewer(); }
+    });
+    window.addEventListener('popstate', function(){
+      if(viewerPage.classList.contains('open')){ closeViewer(); }
+      else { closeNotesPage(); }
+    });
+  })();
+</script>
+
+<script>
+  // Install-as-app support (PWA)
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js').catch(function(){ /* offline caching is a bonus, safe to ignore failures */ });
+    });
+  }
+
+  (function(){
+    var installBtn = document.getElementById('installBtn');
+    var deferredPrompt = null;
+
+    window.addEventListener('beforeinstallprompt', function(e){
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.classList.add('show');
+    });
+
+    installBtn.addEventListener('click', function(){
+      if(!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.finally(function(){
+        deferredPrompt = null;
+        installBtn.classList.remove('show');
+      });
+    });
+
+    window.addEventListener('appinstalled', function(){
+      installBtn.classList.remove('show');
+    });
+  })();
+</script>
+</body>
+</html>
