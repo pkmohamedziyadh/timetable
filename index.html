@@ -309,32 +309,52 @@
   }
   .loader-badge{
     position:relative;
-    width:74px; height:74px;
+    width:96px; height:96px;
     display:flex; align-items:center; justify-content:center;
   }
-  .loader-badge svg{width:100%; height:100%;}
-  .loader-badge circle{
-    fill:none;
-    stroke-width:2.4;
+  .loader-badge svg{width:100%; height:100%; overflow:visible;}
+
+  .runner{ animation:runner-bounce 0.42s ease-in-out infinite; transform-origin:50% 50%; }
+  .runner .limb{ stroke:#F3E7D3; stroke-width:6; stroke-linecap:round; }
+  .runner .head{ fill:#F3E7D3; }
+  .runner .torso{ stroke:#F3E7D3; stroke-width:6.5; stroke-linecap:round; }
+
+  .runner .arm-back{ transform-origin:49px 40px; animation:arm-back-swing 0.42s ease-in-out infinite; }
+  .runner .arm-front{ transform-origin:53px 40px; animation:arm-front-swing 0.42s ease-in-out infinite; }
+  .runner .leg-back{ transform-origin:47px 62px; animation:leg-back-swing 0.42s ease-in-out infinite; }
+  .runner .leg-front{ transform-origin:50px 62px; animation:leg-front-swing 0.42s ease-in-out infinite; }
+
+  @keyframes runner-bounce{
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(-5px); }
   }
-  .loader-badge .track{stroke:rgba(255,255,255,0.16);}
-  .loader-badge .arc{
-    stroke:var(--gold);
-    stroke-linecap:round;
-    stroke-dasharray:150;
-    stroke-dashoffset:112;
-    transform-origin:50% 50%;
-    animation:loader-spin 1.1s linear infinite;
+  @keyframes arm-back-swing{
+    0%, 100%{ transform:rotate(35deg); }
+    50%{ transform:rotate(-40deg); }
   }
-  .loader-badge .initial{
-    position:absolute;
-    font-family:'Lora',serif;
-    font-weight:700;
-    font-size:20px;
-    color:#F3E7D3;
-    letter-spacing:0.5px;
+  @keyframes arm-front-swing{
+    0%, 100%{ transform:rotate(-40deg); }
+    50%{ transform:rotate(35deg); }
   }
-  @keyframes loader-spin{to{transform:rotate(360deg);}}
+  @keyframes leg-back-swing{
+    0%, 100%{ transform:rotate(-32deg); }
+    50%{ transform:rotate(42deg); }
+  }
+  @keyframes leg-front-swing{
+    0%, 100%{ transform:rotate(42deg); }
+    50%{ transform:rotate(-32deg); }
+  }
+
+  .runner-dash{ stroke:var(--gold); stroke-width:3; stroke-linecap:round; opacity:0; }
+  .runner-dash.d1{ animation:dash-flicker 0.42s ease-in-out infinite; }
+  .runner-dash.d2{ animation:dash-flicker 0.42s ease-in-out infinite .08s; }
+  .runner-dash.d3{ animation:dash-flicker 0.42s ease-in-out infinite .16s; }
+  @keyframes dash-flicker{
+    0%{ opacity:0; transform:translateX(6px); }
+    35%{ opacity:.85; transform:translateX(0); }
+    70%{ opacity:0; transform:translateX(-4px); }
+    100%{ opacity:0; transform:translateX(-4px); }
+  }
 
   .loader-mark{
     font-family:'Space Mono',monospace;
@@ -384,7 +404,8 @@
   #loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
 
   @media (prefers-reduced-motion: reduce){
-    .loader-badge .arc{animation:none;}
+    .runner, .runner .arm-back, .runner .arm-front, .runner .leg-back, .runner .leg-front{ animation:none; }
+    .runner-dash{ animation:none; opacity:0; }
     .loader-dots span{animation:none; opacity:.7;}
     .loader-bar::after{animation:none; width:100%;}
   }
@@ -650,11 +671,19 @@
 
 <div id="loader" role="status" aria-live="polite">
   <div class="loader-badge">
-    <svg viewBox="0 0 80 80">
-      <circle class="track" cx="40" cy="40" r="24"></circle>
-      <circle class="arc" cx="40" cy="40" r="24"></circle>
+    <svg viewBox="0 0 100 100">
+      <line class="runner-dash d1" x1="14" y1="70" x2="24" y2="70"></line>
+      <line class="runner-dash d2" x1="10" y1="78" x2="22" y2="78"></line>
+      <line class="runner-dash d3" x1="16" y1="86" x2="26" y2="86"></line>
+      <g class="runner">
+        <circle class="head" cx="52" cy="24" r="7.5"></circle>
+        <line class="torso" x1="50" y1="33" x2="47" y2="60"></line>
+        <line class="limb arm-back" x1="49" y1="40" x2="38" y2="52"></line>
+        <line class="limb arm-front" x1="53" y1="40" x2="63" y2="30"></line>
+        <line class="limb leg-back" x1="47" y1="62" x2="34" y2="72"></line>
+        <line class="limb leg-front" x1="50" y1="62" x2="63" y2="76"></line>
+      </g>
     </svg>
-    <span class="initial">S</span>
   </div>
   <div class="loader-mark">S – V Y A S A</div>
   <div class="loader-text">Loading timetable<span class="loader-dots"><span></span><span></span><span></span></span></div>
@@ -915,7 +944,7 @@
   document.documentElement.classList.add('is-loading');
   (function(){
     var loader = document.getElementById('loader');
-    var minDelay = 3500;  // keep it visible for ~3-4s
+    var minDelay = 2000;  // keep it visible for ~2s
     var start = Date.now();
 
     function reveal(){
