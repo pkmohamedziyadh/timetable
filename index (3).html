@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>S-VYASA | Class Time Table — V Semester CSE (Sec-E)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,600&family=Poppins:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+
+<style>
+  :root{
+    --maroon:#7A1F2B;
+    --maroon-deep:#571620;
+    --cream:#FBF6EF;
+    --ink:#2B2320;
+    --gold:#B8862E;
+    --line:#E4D9C8;
+    --slate:#5B6472;
+
+    /* subject colors */
+    --c-ai:#7A1F2B;
+    --c-toc:#1F5E7A;
+    --c-bda:#8A5A1F;
+    --c-ds:#2E6B4F;
+    --c-nms:#6B4B8A;
+    --c-dbms:#B8862E;
+    --c-dwm:#3D6B6B;
+    --c-mgmt:#8A3B5C;
+    --c-lab:#B8862E;
+    --c-oe:#5B6472;
+    --c-misc:#9A9186;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1200px 500px at 10% -10%, #F3E7D3 0%, transparent 60%),
+      var(--cream);
+    font-family:'Poppins',sans-serif;
+    color:var(--ink);
+    padding:40px 20px 70px;
+  }
+
+  .sheet{
+    max-width:1280px;
+    margin:0 auto;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 30px 60px -25px rgba(87,22,32,0.25);
+  }
+
+  /* ---------- HEADER ---------- */
+  header{
+    background:linear-gradient(135deg,var(--maroon) 0%,var(--maroon-deep) 100%);
+    color:#fff;
+    padding:12px 36px 10px;
+    position:relative;
+    overflow:hidden;
+  }
+  header::after{
+    content:"";
+    position:absolute;
+    right:-60px; top:-60px;
+    width:260px; height:260px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.12);
+  }
+  header::before{
+    content:"";
+    position:absolute;
+    right:20px; top:-20px;
+    width:180px; height:180px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.1);
+  }
+  .brand{
+    display:flex;
+    align-items:baseline;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .brand .mark{
+    font-family:'Space Mono',monospace;
+    font-size:12px;
+    letter-spacing:3px;
+    color:#E8C88A;
+    border:1px solid rgba(232,200,138,0.5);
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  h1{
+    font-family:'Lora',serif;
+    font-weight:700;
+    font-size:30px;
+    margin:6px 0 2px;
+    letter-spacing:0.5px;
+  }
+  .sub{
+    font-size:14.5px;
+    color:#EBD8C4;
+    max-width:520px;
+    line-height:1.5;
+  }
+  .meta-grid{
+    margin-top:14px;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(160px,1fr));
+    gap:14px 28px;
+    position:relative;
+    z-index:2;
+  }
+  .meta-grid div{font-size:12.5px;color:#E8C88A;letter-spacing:1px;text-transform:uppercase;margin-bottom:3px;}
+  .meta-grid strong{display:block;font-size:15px;color:#fff;font-weight:600;letter-spacing:0;text-transform:none;margin-top:2px;}
+
+  /* ---------- TABLE ---------- */
+  .table-wrap{padding:14px 26px 2px;overflow-x:auto;}
+  .table-wrap table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+    min-width:1080px;
+  }
+  thead th{
+    background:var(--maroon);
+    color:#fff;
+    font-family:'Space Mono',monospace;
+    font-weight:400;
+    font-size:11.5px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    padding:6px 5px;
+    text-align:center;
+    border-right:1px solid rgba(255,255,255,0.15);
+  }
+  thead th:first-child{border-top-left-radius:10px;}
+  thead th:last-child{border-top-right-radius:10px; border-right:none;}
+  thead .time{font-family:'Poppins',sans-serif;font-weight:700;font-size:12.5px;display:block;letter-spacing:0.3px;text-transform:none;margin-top:2px;}
+
+  tbody th{
+    background:#F6ECDD;
+    color:var(--maroon-deep);
+    font-family:'Lora',serif;
+    font-weight:600;
+    font-size:14px;
+    text-align:center;
+    padding:6px 6px;
+    border-bottom:1px solid var(--line);
+    border-right:1px solid var(--line);
+    letter-spacing:0.5px;
+  }
+  td{
+    border-bottom:1px solid var(--line);
+    border-right:1px solid var(--line);
+    padding:5px 6px;
+    vertical-align:middle;
+    text-align:center;
+    font-size:12.6px;
+  }
+  td:last-child{border-right:none;}
+  tbody tr:nth-child(even) td, tbody tr:nth-child(even) th{background:#FCF9F4;}
+  tbody tr:last-child td, tbody tr:last-child th{border-bottom:none;}
+
+  .brk{
+    background:repeating-linear-gradient(135deg,#F1E7D8,#F1E7D8 6px,#EADFCB 6px,#EADFCB 12px)!important;
+    width:14px;
+    padding:0!important;
+  }
+
+  .chip{
+    display:block;
+    border-radius:9px;
+    padding:5px 6px 5px;
+    color:#fff;
+    line-height:1.28;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.15);
+  }
+  .chip .name{display:block;font-weight:700;font-size:11.6px;letter-spacing:0.1px;line-height:1.2;}
+  .chip .fac{display:block;font-size:9.8px;opacity:0.92;margin-top:1px;font-weight:500;}
+  .chip .room{display:inline-block;margin-top:4px;font-family:'Space Mono',monospace;font-size:9.5px;background:rgba(255,255,255,0.18);padding:1px 6px;border-radius:5px;}
+
+  .chip.stack{padding:6px 6px 6px;}
+  .chip.stack .name{font-size:11.6px;}
+  .two-slot{display:flex;flex-direction:column;gap:5px;}
+
+  .plain{
+    color:var(--slate);
+    font-weight:600;
+    font-size:12.5px;
+    font-family:'Lora',serif;
+    font-style:italic;
+  }
+  .oe .chip, .plain.oe{background:var(--c-oe);}
+  td .plain.oe{background:none;color:var(--maroon);font-weight:700;font-style:normal;}
+
+  .empty-note{
+    max-width:1080px;margin:0 auto;padding:0 30px 2px;
+    font-size:10px;color:var(--slate);
+  }
+
+  /* ---------- LEGEND / COURSE TABLE ---------- */
+  .legend-section{padding:0px 36px 10px;}
+  .legend-title{
+    font-family:'Lora',serif;
+    font-size:16px;
+    color:var(--maroon-deep);
+    margin:4px 0 5px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .legend-title::before{content:"";width:22px;height:2px;background:var(--gold);display:inline-block;}
+
+  .course-table{width:100%;border-collapse:collapse;font-size:11px;table-layout:fixed;}
+  .course-table th{
+    text-align:left;background:#F6ECDD;color:var(--maroon-deep);
+    font-family:'Space Mono',monospace;font-size:10.5px;letter-spacing:1px;text-transform:uppercase;
+    padding:3px 14px;border-bottom:2px solid var(--maroon);
+  }
+  .course-table td{padding:3px 14px;border-bottom:1px solid var(--line);word-break:break-word;}
+  .course-table tr:hover td{background:#FBF3E8;}
+  .swatch{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:9px;vertical-align:-1px;}
+
+  .removed-note{
+    margin:5px 0 0;
+    padding:6px 14px;
+    background:#FBF0EE;
+    border:1px solid #E7CFCB;
+    border-radius:10px;
+    font-size:12.5px;
+    color:#8A3B34;
+    line-height:1.4;
+  }
+  .removed-note strong{color:var(--maroon-deep);}
+
+  footer{
+    display:flex;
+    justify-content:space-between;
+    padding:0px 36px 4px;
+    border-top:1px dashed var(--line);
+    flex-wrap:wrap;
+    gap:18px;
+  }
+  footer div{font-size:12.5px;color:var(--slate);}
+  footer strong{display:block;color:var(--ink);font-family:'Lora',serif;font-size:14px;margin-bottom:5px;}
+
+  @media (max-width:720px){
+    header{padding:26px 22px;}
+    h1{font-size:28px;}
+    .meta-grid{grid-template-columns:repeat(2,1fr);}
+    .legend-section, .table-wrap{padding-left:16px;padding-right:16px;}
+    footer{padding:22px;}
+    .course-table th:first-child, .course-table td:first-child{width:56%;}
+    .course-table th:last-child, .course-table td:last-child{width:44%;}
+    .course-table th, .course-table td{padding:6px 8px;font-size:10.5px;}
+  }
+
+  /* ---------- LOADER ---------- */
+  html.is-loading, html.is-loading body{overflow:hidden; height:100%;}
+  #loader{
+    position:fixed; inset:0; z-index:9999;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(184,134,46,0.18) 0%, transparent 55%),
+      linear-gradient(135deg,var(--maroon) 0%,var(--maroon-deep) 100%);
+    transition:opacity .55s ease, visibility .55s ease;
+  }
+  #loader::before{
+    content:"";
+    position:absolute; left:50%; top:50%;
+    width:340px; height:340px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,0.08);
+    transform:translate(-50%,-50%);
+  }
+  .loader-badge{
+    position:relative;
+    width:74px; height:74px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .loader-badge svg{width:100%; height:100%;}
+  .loader-badge circle{
+    fill:none;
+    stroke-width:2.4;
+  }
+  .loader-badge .track{stroke:rgba(255,255,255,0.16);}
+  .loader-badge .arc{
+    stroke:var(--gold);
+    stroke-linecap:round;
+    stroke-dasharray:150;
+    stroke-dashoffset:112;
+    transform-origin:50% 50%;
+    animation:loader-spin 1.1s linear infinite;
+  }
+  .loader-badge .initial{
+    position:absolute;
+    font-family:'Lora',serif;
+    font-weight:700;
+    font-size:20px;
+    color:#F3E7D3;
+    letter-spacing:0.5px;
+  }
+  @keyframes loader-spin{to{transform:rotate(360deg);}}
+
+  .loader-mark{
+    font-family:'Space Mono',monospace;
+    font-size:12px; letter-spacing:4px;
+    color:#E8C88A; text-transform:uppercase;
+  }
+  .loader-text{
+    font-family:'Poppins',sans-serif;
+    font-size:12.5px; color:#EBD8C4;
+    display:flex; align-items:center; gap:7px;
+  }
+  .loader-dots span{
+    display:inline-block; width:4px; height:4px; margin-left:3px;
+    border-radius:50%; background:#EBD8C4;
+    animation:loader-bounce 1.2s ease-in-out infinite;
+  }
+  .loader-dots span:nth-child(2){animation-delay:.15s;}
+  .loader-dots span:nth-child(3){animation-delay:.3s;}
+  @keyframes loader-bounce{0%,80%,100%{opacity:.25; transform:translateY(0);} 40%{opacity:1; transform:translateY(-3px);}}
+
+  .loader-bar{
+    width:130px; height:2px; border-radius:2px;
+    background:rgba(255,255,255,0.14);
+    overflow:hidden;
+  }
+  .loader-bar::after{
+    content:""; display:block; width:40%; height:100%;
+    background:var(--gold); border-radius:2px;
+    animation:loader-slide 1.15s ease-in-out infinite;
+  }
+  @keyframes loader-slide{
+    0%{transform:translateX(-100%);}
+    50%{transform:translateX(130%);}
+    100%{transform:translateX(130%);}
+  }
+
+  .loader-credit{
+    position:absolute;
+    bottom:34px;
+    font-family:'Space Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:2px;
+    text-transform:uppercase;
+    color:rgba(235,216,196,0.55);
+  }
+
+  #loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
+
+  @media (prefers-reduced-motion: reduce){
+    .loader-badge .arc{animation:none;}
+    .loader-dots span{animation:none; opacity:.7;}
+    .loader-bar::after{animation:none; width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div id="loader" role="status" aria-live="polite">
+  <div class="loader-badge">
+    <svg viewBox="0 0 80 80">
+      <circle class="track" cx="40" cy="40" r="24"></circle>
+      <circle class="arc" cx="40" cy="40" r="24"></circle>
+    </svg>
+    <span class="initial">S</span>
+  </div>
+  <div class="loader-mark">S – V Y A S A</div>
+  <div class="loader-text">Loading timetable<span class="loader-dots"><span></span><span></span><span></span></span></div>
+  <div class="loader-bar"></div>
+  <div class="loader-credit">Made by Ziyadh</div>
+</div>
+
+<div class="sheet">
+
+  <header>
+    <div class="brand">
+      <span class="mark">S–VYASA</span>
+      <span style="font-size:12px;color:#EBD8C4;">Deemed to be University u/s 3 of UGC Act, 1956</span>
+    </div>
+    <h1>Class Time Table</h1>
+    <div class="sub">School of Engineering &amp; Technology — Swami Vivekananda Yoga Anusandhana Samsthana</div>
+
+    <div class="meta-grid">
+      <div>Semester<strong>V Semester</strong></div>
+      <div>Academic Year<strong>2026 – 2027 (Odd)</strong></div>
+      <div>Specialization<strong>CSE (General) · Sec-E</strong></div>
+      <div>Classroom No.<strong>F-16</strong></div>
+      <div>W.E.F<strong>10 / 08 / 2026</strong></div>
+      <div>Duration<strong>—</strong></div>
+    </div>
+  </header>
+
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:80px;">Day</th>
+        <th>9.00<span class="time">9.00 – 9.50</span></th>
+        <th>9.50<span class="time">9.50 – 10.40</span></th>
+        <th class="brk"></th>
+        <th>10.50<span class="time">10.50 – 11.40</span></th>
+        <th>11.40<span class="time">11.40 – 12.30</span></th>
+        <th class="brk"></th>
+        <th>1.10<span class="time">1.10 – 2.00</span></th>
+        <th>2.00<span class="time">2.00 – 2.50</span></th>
+        <th class="brk"></th>
+        <th>3.00<span class="time">3.00 – 3.45</span></th>
+        <th>3.45<span class="time">3.45 – 4.30</span></th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- MONDAY -->
+      <tr>
+        <th>MON</th>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td class="brk"></td>
+        <td colspan="2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain oe">Open Elective</span></td>
+        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Placement Training</span></td>
+        <td><span class="plain">Placement Training</span></td>
+      </tr>
+
+      <!-- TUESDAY -->
+      <tr>
+        <th>TUE</th>
+        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Placement Training</span></td>
+        <td><span class="plain">Placement Training</span></td>
+      </tr>
+
+      <!-- WEDNESDAY -->
+      <tr>
+        <th>WED</th>
+        <td colspan="2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain oe">Open Elective</span></td>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Mentoring</span></td>
+        <td><span class="plain">Sports</span></td>
+      </tr>
+
+      <!-- THURSDAY -->
+      <tr>
+        <th>THU</th>
+        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td class="brk"></td>
+        <td colspan="2"><span class="chip" style="background:var(--c-lab)"><span class="name">Database Mgmt System — Lab</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td><span class="plain">Club Activity</span></td>
+      </tr>
+
+      <!-- FRIDAY -->
+      <tr>
+        <th>FRI</th>
+        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Library</span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain oe">Open Elective</span></td>
+        <td><span class="plain">Mentoring</span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td><span class="plain">Club Activity</span></td>
+      </tr>
+
+      <!-- SATURDAY -->
+      <tr>
+        <th>SAT</th>
+        <td><span class="plain">Club Activity</span></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td><span class="plain">Club Activity</span></td>
+        <td class="brk"></td>
+        <td colspan="2"><span class="plain">Club Activity</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+  <div class="empty-note">Shaded diagonal columns mark short breaks between periods (10.40–10.50 &amp; 12.30–1.10, and 2.50–3.00).</div>
+
+  <div class="legend-section">
+    <div class="legend-title">Course Directory</div>
+    <table class="course-table">
+      <thead>
+        <tr><th>Course</th><th>Faculty</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="swatch" style="background:var(--c-ai)"></span>Artificial Intelligence</td><td>Ms Nidhi Singh</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-toc)"></span>Theory of Computation</td><td>Dr Ramkumar P</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-bda)"></span>Big Data Analytics</td><td>Ms. Nandini / Sugandh Kumar</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-ds)"></span>Distributed Systems</td><td>Mr. Himanshu Sahu</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-nms)"></span>Network Management Systems</td><td>Dr. Naveen N</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-dbms)"></span>Database Management System</td><td><strong>Mr Mohan Gowda G S</strong></td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-dwm)"></span>Introduction to Data Warehousing &amp; Data Mining</td><td>Dr. R Nandhi Kesavan</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-mgmt)"></span>Business Essentials for Engineers</td><td>Management Faculty</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-lab)"></span>Database Management System — Lab</td><td>Mr Mohan Gowda G S</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+    <div><strong>Prepared By</strong>In-charge</div>
+    <div><strong>Verified and Recommended</strong>HOD / Dean</div>
+    <div><strong>Approved</strong>Director Academics</div>
+  </footer>
+
+</div>
+<script>
+  document.documentElement.classList.add('is-loading');
+  (function(){
+    var loader = document.getElementById('loader');
+    var minDelay = 3500;  // keep it visible for ~3-4s
+    var start = Date.now();
+
+    function reveal(){
+      var wait = Math.max(0, minDelay - (Date.now() - start));
+      setTimeout(function(){
+        document.documentElement.classList.remove('is-loading');
+        loader.classList.add('hide');
+        loader.addEventListener('transitionend', function(){ loader.remove(); }, {once:true});
+        setTimeout(function(){ if(loader.parentNode) loader.remove(); }, 700);
+      }, wait);
+    }
+
+    if (document.readyState === 'complete') reveal();
+    else window.addEventListener('load', reveal);
+  })();
+</script>
+</body>
+</html>
