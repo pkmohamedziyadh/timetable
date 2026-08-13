@@ -1,4 +1,4 @@
-const CACHE_NAME = 'svyasa-timetable-v1';
+const CACHE_NAME = 'svyasa-timetable-v2';
 const CORE_ASSETS = [
   './',
   './index.html',
