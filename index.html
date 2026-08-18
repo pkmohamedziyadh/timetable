@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>S-VYASA | Class Time Table — V Semester CSE (Sec-E)</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7A1F2B">
 <link rel="icon" href="favicon-48.png?v=2" sizes="48x48" type="image/png">
@@ -41,7 +41,8 @@
     --c-misc:#9A9186;
   }
 
-  *{box-sizing:border-box;}
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; overscroll-behavior-y:none; }
   body{
     margin:0;
     background:
@@ -49,8 +50,15 @@
       var(--cream);
     font-family:'Poppins',sans-serif;
     color:var(--ink);
-    padding:40px 20px 70px;
+    padding:
+      max(40px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+      max(70px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+    overscroll-behavior-y:none;
+    overflow-x:hidden;
   }
+
+  button, a{ touch-action:manipulation; }
+  button{ -webkit-user-select:none; user-select:none; }
 
   .sheet{
     max-width:1280px;
@@ -133,6 +141,7 @@
   .install-btn svg{width:14px; height:14px;}
   @media (max-width:720px){
     .install-btn{position:static; margin-top:16px;}
+    .swipe-hint{display:flex;}
   }
   .meta-grid{
     margin-top:14px;
@@ -146,7 +155,25 @@
   .meta-grid strong{display:block;font-size:15px;color:#fff;font-weight:600;letter-spacing:0;text-transform:none;margin-top:2px;}
 
   /* ---------- TABLE ---------- */
-  .table-wrap{padding:14px 26px 2px;overflow-x:auto;}
+  .table-wrap{
+    padding:14px 26px 2px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-x:contain;
+  }
+  .table-wrap table{ scroll-snap-type:x proximity; }
+  .table-wrap thead th{ scroll-snap-align:start; }
+  .swipe-hint{
+    display:none;
+    align-items:center; gap:6px;
+    font-family:'Poppins',sans-serif; font-size:11px; color:var(--slate);
+    padding:0 26px 4px;
+  }
+  .swipe-hint svg{width:13px; height:13px; animation:swipe-nudge 1.4s ease-in-out infinite;}
+  @keyframes swipe-nudge{
+    0%, 100%{ transform:translateX(0); opacity:.55; }
+    50%{ transform:translateX(4px); opacity:1; }
+  }
   .table-wrap table{
     width:100%;
     border-collapse:separate;
@@ -207,9 +234,12 @@
     line-height:1.28;
     box-shadow:inset 0 0 0 1px rgba(255,255,255,0.15);
     cursor:pointer;
+    -webkit-touch-callout:none;
+    -webkit-user-select:none; user-select:none;
     transition:transform .15s ease, box-shadow .15s ease;
   }
   .chip:hover{transform:translateY(-1px); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.3), 0 4px 10px -4px rgba(0,0,0,0.35);}
+  .chip:active{transform:scale(0.97); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.35);}
   .chip:focus-visible{outline:2px solid var(--gold); outline-offset:2px;}
   .chip .name{display:block;font-weight:700;font-size:11.6px;letter-spacing:0.1px;line-height:1.2;}
   .chip .fac{display:block;font-size:9.8px;opacity:0.92;margin-top:1px;font-weight:500;}
@@ -293,11 +323,14 @@
   html.is-loading, html.is-loading body{overflow:hidden; height:100%;}
   #loader{
     position:fixed; inset:0; z-index:9999;
+    height:100dvh;
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
     background:
       radial-gradient(900px 500px at 15% -10%, rgba(184,134,46,0.18) 0%, transparent 55%),
       linear-gradient(135deg,var(--maroon) 0%,var(--maroon-deep) 100%);
     transition:opacity .55s ease, visibility .55s ease;
+    padding-top:env(safe-area-inset-top);
+    padding-bottom:env(safe-area-inset-bottom);
   }
   #loader::before{
     content:"";
@@ -393,7 +426,7 @@
 
   .loader-credit{
     position:absolute;
-    bottom:34px;
+    bottom:calc(34px + env(safe-area-inset-bottom));
     font-family:'Space Mono',monospace;
     font-size:10.5px;
     letter-spacing:2px;
@@ -413,9 +446,11 @@
   /* ---------- SUBJECT MODAL ---------- */
   .modal-overlay{
     position:fixed; inset:0; z-index:5000;
+    height:100dvh;
     background:rgba(43,35,32,0.55);
     display:flex; align-items:center; justify-content:center;
-    padding:20px;
+    padding:max(20px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+            max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
     opacity:0; visibility:hidden;
     transition:opacity .25s ease, visibility .25s ease;
   }
@@ -433,12 +468,14 @@
   .modal-overlay.open .modal-card{transform:translateY(0) scale(1);}
   .modal-close{
     position:absolute; top:14px; right:14px;
-    width:28px; height:28px; border-radius:50%;
+    width:36px; height:36px; border-radius:50%;
     border:none; background:#F6ECDD; color:var(--maroon-deep);
     font-size:16px; line-height:1; cursor:pointer;
     display:flex; align-items:center; justify-content:center;
+    -webkit-touch-callout:none;
   }
   .modal-close:hover{background:#EFE0C9;}
+  .modal-close:active{background:#E5D2AC;}
   .modal-swatch{
     width:38px; height:38px; border-radius:10px; margin-bottom:16px;
     display:flex; align-items:center; justify-content:center;
@@ -455,12 +492,18 @@
   .modal-links{display:flex; flex-direction:column; gap:10px; margin-bottom:6px;}
   .modal-btn{
     display:flex; align-items:center; gap:12px;
+    width:100%; text-align:left;
+    appearance:none; -webkit-appearance:none; font:inherit;
+    min-height:44px;
     padding:12px 13px; border-radius:12px;
     background:#F9F4EB; color:var(--ink);
     text-decoration:none; border:1px solid var(--line);
+    cursor:pointer;
+    -webkit-touch-callout:none;
     transition:background .15s ease, border-color .15s ease, transform .15s ease;
   }
   .modal-btn:hover{background:#F3E8D4; border-color:#E0CFAE; transform:translateY(-1px);}
+  .modal-btn:active{background:#EFE0C9; transform:translateY(0) scale(0.99);}
   .modal-btn-icon{
     flex:none; width:34px; height:34px; border-radius:9px;
     display:flex; align-items:center; justify-content:center;
@@ -489,8 +532,11 @@
   /* ---------- NOTES / MODULE PAGE ---------- */
   .notes-page{
     position:fixed; inset:0; z-index:6000;
+    height:100dvh;
     background:var(--cream);
     overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
     transform:translateX(100%);
     transition:transform .38s cubic-bezier(.2,.8,.2,1);
   }
@@ -498,21 +544,23 @@
   .notes-header{
     background:linear-gradient(135deg,var(--maroon) 0%,var(--maroon-deep) 100%);
     color:#fff;
-    padding:22px 24px 26px;
+    padding:calc(22px + env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) 26px max(24px, env(safe-area-inset-left));
     position:sticky; top:0; z-index:2;
     display:flex; align-items:flex-start; gap:14px;
   }
   .notes-back{
     flex:none;
-    width:36px; height:36px; border-radius:50%;
+    width:40px; height:40px; border-radius:50%;
     background:rgba(255,255,255,0.12);
     border:1px solid rgba(255,255,255,0.2);
     color:#fff; cursor:pointer;
     display:flex; align-items:center; justify-content:center;
     font-size:16px;
+    -webkit-touch-callout:none;
     transition:background .15s ease;
   }
   .notes-back:hover{background:rgba(255,255,255,0.22);}
+  .notes-back:active{background:rgba(255,255,255,0.3);}
   .notes-header-text{flex:1; min-width:0;}
   .notes-eyebrow{
     font-family:'Space Mono',monospace; font-size:10px; letter-spacing:2px;
@@ -524,7 +572,10 @@
   }
   .notes-sub{font-size:12.5px; color:#EBD8C4; margin:0;}
 
-  .notes-body{padding:26px 24px 60px; max-width:560px; margin:0 auto;}
+  .notes-body{
+    padding:26px max(24px, env(safe-area-inset-right)) calc(60px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+    max-width:560px; margin:0 auto;
+  }
   .notes-section-label{
     font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:1.5px;
     text-transform:uppercase; color:var(--slate); margin:0 0 14px;
@@ -538,17 +589,23 @@
     font:inherit;
     text-decoration:none; color:var(--ink);
     padding:13px 14px;
+    min-height:44px;
     border-radius:13px;
     background:#fff;
     border:1px solid var(--line);
     margin-bottom:10px;
     cursor:pointer;
+    -webkit-touch-callout:none;
     transition:border-color .15s ease, transform .15s ease, box-shadow .15s ease;
   }
   .module-item.available:hover{
     border-color:#D9C39A;
     transform:translateX(3px);
     box-shadow:0 8px 20px -12px rgba(87,22,32,0.3);
+  }
+  .module-item.available:active{
+    border-color:#D9C39A;
+    transform:translateX(1px) scale(0.99);
   }
   .module-item.locked{cursor:not-allowed;}
   .module-badge{
@@ -573,14 +630,17 @@
     font:inherit;
     text-decoration:none; color:var(--ink);
     padding:15px 16px;
+    min-height:44px;
     border-radius:14px;
     background:linear-gradient(135deg,#FBF3E1 0%,#F6E8CB 100%);
     border:1px solid #E9D4A6;
     cursor:pointer;
+    -webkit-touch-callout:none;
     transition:transform .15s ease, box-shadow .15s ease;
   }
   .qb-card:disabled{cursor:not-allowed;}
   .qb-card.available:hover{transform:translateX(3px); box-shadow:0 8px 20px -12px rgba(184,134,46,0.4);}
+  .qb-card.available:active{transform:translateX(1px) scale(0.99);}
   .qb-badge{
     flex:none; width:40px; height:40px; border-radius:11px;
     background:var(--gold); color:#fff;
@@ -594,6 +654,7 @@
   /* ---------- IN-SITE DOCUMENT VIEWER ---------- */
   .viewer-page{
     position:fixed; inset:0; z-index:7000;
+    height:100dvh;
     background:#fff;
     display:flex; flex-direction:column;
     transform:translateY(100%);
@@ -603,7 +664,7 @@
   .viewer-header{
     flex:none;
     display:flex; align-items:center; gap:12px;
-    padding:14px 18px;
+    padding:calc(14px + env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) 14px max(18px, env(safe-area-inset-left));
     background:#fff;
     border-bottom:1px solid var(--line);
     box-shadow:0 2px 10px -6px rgba(43,35,32,0.15);
@@ -611,13 +672,15 @@
   }
   .viewer-back{
     flex:none;
-    width:34px; height:34px; border-radius:50%;
+    width:38px; height:38px; border-radius:50%;
     background:#F6ECDD; border:none; color:var(--maroon-deep);
     cursor:pointer; font-size:16px;
     display:flex; align-items:center; justify-content:center;
+    -webkit-touch-callout:none;
     transition:background .15s ease;
   }
   .viewer-back:hover{background:#EFE0C9;}
+  .viewer-back:active{background:#E5D2AC;}
   .viewer-titles{flex:1; min-width:0;}
   .viewer-title{
     font-family:'Poppins',sans-serif; font-weight:600; font-size:14px; color:var(--ink);
@@ -629,12 +692,14 @@
     display:flex; align-items:center; gap:6px;
     font-family:'Poppins',sans-serif; font-size:12px; font-weight:600;
     color:var(--maroon-deep); text-decoration:none;
-    background:#F6ECDD; padding:8px 12px; border-radius:9px;
+    background:#F6ECDD; padding:9px 12px; border-radius:9px;
     border:1px solid var(--line);
+    -webkit-touch-callout:none;
     transition:background .15s ease;
   }
   .viewer-open-external:hover{background:#EFE0C9;}
-  .viewer-body{flex:1; position:relative; background:#F3EEE4;}
+  .viewer-open-external:active{background:#E5D2AC;}
+  .viewer-body{flex:1; position:relative; background:#F3EEE4; padding-bottom:env(safe-area-inset-bottom);}
   .viewer-body iframe{
     width:100%; height:100%; border:none; display:block;
     position:relative; z-index:1;
@@ -654,7 +719,7 @@
   @keyframes viewer-spin{to{transform:rotate(360deg);}}
   .viewer-loading-text{font-size:12.5px; color:var(--slate); font-family:'Poppins',sans-serif;}
   .viewer-fallback{
-    position:absolute; left:50%; bottom:22px; transform:translateX(-50%);
+    position:absolute; left:50%; bottom:calc(22px + env(safe-area-inset-bottom)); transform:translateX(-50%);
     font-size:11.5px; color:var(--slate); text-align:center;
     background:#fff; padding:8px 14px; border-radius:999px;
     border:1px solid var(--line); box-shadow:0 6px 16px -8px rgba(43,35,32,0.25);
@@ -711,9 +776,14 @@
       <div>Specialization<strong>CSE (General) · Sec-E</strong></div>
       <div>Classroom No.<strong>F-16</strong></div>
       <div>W.E.F<strong>10 / 08 / 2026</strong></div>
-      <div>Duration<strong>—</strong></div>
+      <div>Duration<strong>Aug '26 – Dec '26</strong></div>
     </div>
   </header>
+
+  <div class="swipe-hint" id="swipeHint">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+    Swipe to see the full week
+  </div>
 
   <div class="table-wrap">
   <table>
@@ -738,13 +808,13 @@
       <!-- MONDAY -->
       <tr>
         <th>MON</th>
-        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
         <td><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td class="brk"></td>
+        <td><span class="plain">Mentoring</span></td>
+        <td><span class="plain oe">Open Elective</span></td>
         <td class="brk"></td>
         <td colspan="2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
-        <td class="brk"></td>
-        <td><span class="plain oe">Open Elective</span></td>
-        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
         <td class="brk"></td>
         <td><span class="plain">Placement Training</span></td>
         <td><span class="plain">Placement Training</span></td>
@@ -757,10 +827,10 @@
         <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
         <td class="brk"></td>
         <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
-        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
         <td><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
         <td class="brk"></td>
         <td><span class="plain">Placement Training</span></td>
         <td><span class="plain">Placement Training</span></td>
@@ -769,16 +839,15 @@
       <!-- WEDNESDAY -->
       <tr>
         <th>WED</th>
-        <td colspan="2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
-        <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
-        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
+        <td colspan="2"><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
         <td class="brk"></td>
         <td><span class="plain oe">Open Elective</span></td>
-        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
-        <td class="brk"></td>
         <td><span class="plain">Mentoring</span></td>
-        <td><span class="plain">Sports</span></td>
+        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
+        <td class="brk"></td>
+        <td colspan="2"><span class="plain">Sports</span></td>
       </tr>
 
       <!-- THURSDAY -->
@@ -787,7 +856,7 @@
         <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
         <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
         <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
         <td class="brk"></td>
         <td colspan="2"><span class="chip" style="background:var(--c-lab)"><span class="name">Database Mgmt System — Lab</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
@@ -802,14 +871,13 @@
         <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
         <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
         <td class="brk"></td>
-        <td><span class="plain">Library</span></td>
-        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Management Faculty</span></span></td>
-        <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
         <td><span class="plain oe">Open Elective</span></td>
-        <td><span class="plain">Mentoring</span></td>
         <td class="brk"></td>
+        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
         <td><span class="plain">Club Activity</span></td>
-        <td><span class="plain">Club Activity</span></td>
+        <td class="brk"></td>
+        <td colspan="2"><span class="plain">Club Activity</span></td>
       </tr>
 
       <!-- SATURDAY -->
@@ -846,7 +914,7 @@
         <tr><td><span class="swatch" style="background:var(--c-nms)"></span>Network Management Systems</td><td>Dr. Naveen N</td></tr>
         <tr><td><span class="swatch" style="background:var(--c-dbms)"></span>Database Management System</td><td><strong>Mr Mohan Gowda G S</strong></td></tr>
         <tr><td><span class="swatch" style="background:var(--c-dwm)"></span>Introduction to Data Warehousing &amp; Data Mining</td><td>Dr. R Nandhi Kesavan</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-mgmt)"></span>Business Essentials for Engineers</td><td>Management Faculty</td></tr>
+        <tr><td><span class="swatch" style="background:var(--c-mgmt)"></span>Business Essentials for Engineers</td><td>Ms. Savitha</td></tr>
         <tr><td><span class="swatch" style="background:var(--c-lab)"></span>Database Management System — Lab</td><td>Mr Mohan Gowda G S</td></tr>
       </tbody>
     </table>
@@ -939,6 +1007,25 @@
     <div class="viewer-fallback">Not loading? <a id="viewerFallbackLink" href="#" target="_blank" rel="noopener">Open in Google Docs</a></div>
   </div>
 </div>
+
+<script>
+  // Hide the "swipe to see the full week" hint once the user has scrolled the table
+  (function(){
+    var wrap = document.querySelector('.table-wrap');
+    var hint = document.getElementById('swipeHint');
+    if(!wrap || !hint) return;
+    var dismissed = false;
+    wrap.addEventListener('scroll', function(){
+      if(dismissed) return;
+      if(wrap.scrollLeft > 8){
+        dismissed = true;
+        hint.style.transition = 'opacity .3s ease';
+        hint.style.opacity = '0';
+        setTimeout(function(){ hint.style.display = 'none'; }, 320);
+      }
+    }, { passive:true });
+  })();
+</script>
 
 <script>
   document.documentElement.classList.add('is-loading');
