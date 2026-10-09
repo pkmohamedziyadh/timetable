@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7A1F2B">
+<script>(function(){try{var t=localStorage.getItem('svyasa_theme');if(!t){t=(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)?'dark':'light';}if(t==='dark'){document.documentElement.setAttribute('data-theme','dark');var m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute('content','#150F0D');}}catch(e){}})();</script>
 <link rel="icon" href="favicon-48.png?v=2" sizes="48x48" type="image/png">
 <link rel="icon" href="icon-192.png?v=2" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
@@ -123,10 +124,28 @@
     max-width:520px;
     line-height:1.5;
   }
-  .install-btn{
+  .header-actions{
     position:absolute;
-    top:34px; right:44px;
+    top:30px; right:36px;
     z-index:3;
+    display:flex; align-items:center; gap:8px;
+  }
+  .header-icon-btn{
+    position:relative;
+    width:36px; height:36px; padding:0;
+    display:inline-flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(232,200,138,0.5);
+    color:#F3E7D3; border-radius:50%;
+    cursor:pointer;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .header-icon-btn svg{width:17px; height:17px;}
+  .header-icon-btn:hover{background:rgba(255,255,255,0.22);}
+  .header-icon-btn:active{transform:scale(.93);}
+  .header-icon-btn.active{background:var(--gold); border-color:var(--gold); color:#fff;}
+  .header-icon-btn .icon-sun{display:none;}
+  .install-btn{
     display:none;
     align-items:center; gap:8px;
     background:rgba(255,255,255,0.12);
@@ -141,7 +160,7 @@
   .install-btn:hover{background:rgba(255,255,255,0.22);}
   .install-btn svg{width:14px; height:14px;}
   @media (max-width:720px){
-    .install-btn{position:static; margin-top:16px;}
+    .header-actions{position:static; margin-top:16px; flex-wrap:wrap;}
     .swipe-hint{display:flex;}
   }
   .meta-grid{
@@ -730,6 +749,116 @@
   @media (prefers-reduced-motion: reduce){
     .viewer-spinner{animation:none; border-top-color:var(--line);}
   }
+
+  /* ---------- TODAY / LIVE / STATUS BANNER ---------- */
+  :root{ --ring-gap:#fff; }
+  .status-banner{
+    display:flex; align-items:center; gap:10px;
+    padding:10px 26px; min-height:42px;
+    background:#F6ECDD; border-bottom:1px solid var(--line);
+    font-family:'Poppins',sans-serif; font-size:13px; color:var(--ink);
+  }
+  .status-dot{flex:none; width:9px; height:9px; border-radius:50%; background:var(--slate);}
+  .status-label{
+    flex:none;
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:1.5px;
+    text-transform:uppercase; font-weight:700; color:var(--slate);
+  }
+  .status-text{flex:1; min-width:0; line-height:1.4;}
+  .status-banner.live{background:#FBEDEA;}
+  .status-banner.live .status-dot{background:#D64545; animation:live-dot 1.4s ease-in-out infinite;}
+  .status-banner.live .status-label{color:#D64545;}
+  .status-banner.next .status-dot{background:var(--gold);}
+  .status-banner.done .status-dot{background:#2E6B4F;}
+  @keyframes live-dot{0%,100%{box-shadow:0 0 0 0 rgba(214,69,69,.55);}50%{box-shadow:0 0 0 6px rgba(214,69,69,0);}}
+
+  .table-wrap tbody tr.today-row td:not(.brk){background:rgba(184,134,46,0.13);}
+  .table-wrap tbody tr.today-row th{background:#EBD9B5; box-shadow:inset 4px 0 0 var(--gold);}
+  .today-badge{
+    display:block; margin:4px auto 0; width:max-content;
+    font-family:'Space Mono',monospace; font-size:8px; letter-spacing:1.2px; font-weight:700;
+    color:#fff; background:var(--maroon); border-radius:999px; padding:2px 6px;
+  }
+
+  .chip.live-now, .plain.live-now{position:relative;}
+  .chip.live-now{
+    box-shadow:0 0 0 2px var(--ring-gap), 0 0 0 4px #D64545;
+    animation:live-ring 1.8s ease-in-out infinite;
+  }
+  .plain.live-now{display:block; background:rgba(214,69,69,.12); border-radius:8px; padding:6px 4px; box-shadow:0 0 0 2px #D64545;}
+  .live-now::after{
+    content:"LIVE"; position:absolute; top:-8px; right:-5px; z-index:2;
+    font-family:'Space Mono',monospace; font-size:8px; font-weight:700; letter-spacing:1px; font-style:normal;
+    background:#D64545; color:#fff; padding:2px 5px; border-radius:999px;
+  }
+  @keyframes live-ring{
+    0%,100%{box-shadow:0 0 0 2px var(--ring-gap), 0 0 0 4px #D64545;}
+    50%{box-shadow:0 0 0 2px var(--ring-gap), 0 0 0 7px rgba(214,69,69,.30);}
+  }
+
+  .toast{
+    position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom));
+    transform:translate(-50%,16px);
+    background:#2B2320; color:#F3E7D3;
+    padding:10px 16px; border-radius:12px;
+    font-family:'Poppins',sans-serif; font-size:12.5px; line-height:1.4; text-align:center;
+    max-width:min(90vw,380px); z-index:9000;
+    opacity:0; visibility:hidden;
+    transition:opacity .25s ease, transform .25s ease, visibility .25s ease;
+    box-shadow:0 12px 28px -10px rgba(0,0,0,.5);
+  }
+  .toast.show{opacity:1; visibility:visible; transform:translate(-50%,0);}
+
+  @media (max-width:720px){
+    .status-banner{padding:10px 16px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .chip.live-now, .status-banner.live .status-dot{animation:none;}
+  }
+
+  /* ---------- DARK THEME ---------- */
+  :root[data-theme="dark"]{
+    color-scheme:dark;
+    --cream:#1A1311; --ink:#F3E7D3; --line:#3B2E29; --slate:#BDAE9F; --ring-gap:#241B18;
+  }
+  [data-theme="dark"] body{background:radial-gradient(1200px 500px at 10% -10%, #2A1D19 0%, transparent 60%), var(--cream);}
+  [data-theme="dark"] .sheet{background:#231A17; box-shadow:0 30px 60px -25px rgba(0,0,0,.65);}
+  [data-theme="dark"] thead th{background:#4A1119;}
+  [data-theme="dark"] tbody th{background:#2E221E; color:#E8C88A;}
+  [data-theme="dark"] tbody tr:nth-child(even) td, [data-theme="dark"] tbody tr:nth-child(even) th{background:#271E1A;}
+  [data-theme="dark"] .brk{background:repeating-linear-gradient(135deg,#2A211D,#2A211D 6px,#33271F 6px,#33271F 12px)!important;}
+  [data-theme="dark"] .plain{color:#CDBFB0;}
+  [data-theme="dark"] td .plain.oe{color:#E8A5AE;}
+  [data-theme="dark"] .table-wrap tbody tr.today-row td:not(.brk){background:rgba(232,200,138,0.10);}
+  [data-theme="dark"] .table-wrap tbody tr.today-row th{background:#3A2B20; box-shadow:inset 4px 0 0 var(--gold);}
+  [data-theme="dark"] .legend-title{color:#F3E7D3;}
+  [data-theme="dark"] .course-table th{background:#2E221E; color:#E8C88A;}
+  [data-theme="dark"] .course-table tr:hover td{background:#2C221E;}
+  [data-theme="dark"] .status-banner{background:#2A201C;}
+  [data-theme="dark"] .status-banner.live{background:rgba(214,69,69,.15);}
+  [data-theme="dark"] .status-banner.live .status-label{color:#FF8A8A;}
+  [data-theme="dark"] .plain.live-now{background:rgba(214,69,69,.2);}
+  [data-theme="dark"] .header-icon-btn .icon-moon{display:none;}
+  [data-theme="dark"] .header-icon-btn .icon-sun{display:block;}
+  [data-theme="dark"] .modal-card{background:#241B18;}
+  [data-theme="dark"] .modal-close{background:#33271F; color:#F3E7D3;}
+  [data-theme="dark"] .modal-close:hover{background:#3D2F25;}
+  [data-theme="dark"] .modal-btn{background:#2E241F;}
+  [data-theme="dark"] .modal-btn:hover, [data-theme="dark"] .modal-btn:active{background:#392C25; border-color:#4D3C32;}
+  [data-theme="dark"] .modal-btn-icon{background:#241B18;}
+  [data-theme="dark"] .module-item{background:#241B18;}
+  [data-theme="dark"] .module-badge{background:#33271F; color:#F3E7D3;}
+  [data-theme="dark"] .module-item.available .module-badge{background:var(--maroon); color:#fff;}
+  [data-theme="dark"] .module-item.available .module-status{color:#7FD1A3;}
+  [data-theme="dark"] .qb-card{background:linear-gradient(135deg,#33281A 0%,#2A2016 100%); border-color:#5A4527;}
+  [data-theme="dark"] .qb-name{color:#E8C88A;}
+  [data-theme="dark"] .qb-status{color:#C9A868;}
+  [data-theme="dark"] .viewer-page, [data-theme="dark"] .viewer-header{background:#241B18;}
+  [data-theme="dark"] .viewer-back, [data-theme="dark"] .viewer-open-external{background:#33271F; color:#F3E7D3;}
+  [data-theme="dark"] .viewer-back:hover, [data-theme="dark"] .viewer-open-external:hover{background:#3D2F25;}
+  [data-theme="dark"] .viewer-body{background:#150F0D;}
+  [data-theme="dark"] .viewer-fallback{background:#241B18;}
+  [data-theme="dark"] .viewer-fallback a{color:#E8C88A;}
 </style>
 </head>
 <body>
@@ -764,10 +893,19 @@
       <span class="mark">S–VYASA</span>
       <span style="font-size:12px;color:#EBD8C4;">Deemed to be University u/s 3 of UGC Act, 1956</span>
     </div>
-    <button type="button" class="install-btn" id="installBtn">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-      Install App
-    </button>
+    <div class="header-actions">
+      <button type="button" class="header-icon-btn" id="remindersBtn" aria-pressed="false" title="Class reminders" aria-label="Toggle class reminders">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+      </button>
+      <button type="button" class="header-icon-btn" id="themeBtn" aria-pressed="false" title="Toggle dark mode" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+      </button>
+      <button type="button" class="install-btn" id="installBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+        Install App
+      </button>
+    </div>
     <h1>Class Time Table</h1>
     <div class="sub">School of Engineering &amp; Technology — Swami Vivekananda Yoga Anusandhana Samsthana</div>
 
@@ -780,6 +918,12 @@
       <div>Duration<strong>Aug '26 – Dec '26</strong></div>
     </div>
   </header>
+
+  <div class="status-banner" id="statusBanner" role="status" aria-live="polite">
+    <span class="status-dot"></span>
+    <span class="status-label" id="statusLabel">Today</span>
+    <span class="status-text" id="statusText"></span>
+  </div>
 
   <div class="swipe-hint" id="swipeHint">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
@@ -807,95 +951,95 @@
     <tbody>
 
       <!-- MONDAY -->
-      <tr>
+      <tr data-day="mon">
         <th>MON</th>
-        <td><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
-        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td data-periods="1"><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td data-periods="2"><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
         <td class="brk"></td>
-        <td><span class="plain">Mentoring</span></td>
-        <td><span class="plain oe">Open Elective</span></td>
+        <td data-periods="3"><span class="plain">Mentoring</span></td>
+        <td data-periods="4"><span class="plain oe">Open Elective</span></td>
         <td class="brk"></td>
-        <td colspan="2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Mr. Vivek Yadav</span><span class="room">F-16</span></span></td>
+        <td colspan="2" data-periods="5,6"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Mr. Vivek Yadav</span><span class="room">F-16</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
-        <td><span class="plain">Placement Training</span></td>
+        <td data-periods="7"><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
+        <td data-periods="8"><span class="plain">Placement Training</span></td>
       </tr>
 
       <!-- TUESDAY -->
-      <tr>
+      <tr data-day="tue">
         <th>TUE</th>
-        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
-        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td data-periods="1"><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td data-periods="2"><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
-        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
+        <td data-periods="3"><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td data-periods="4"><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
-        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td data-periods="5"><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td data-periods="6"><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
         <td class="brk"></td>
-        <td><span class="plain">Library</span></td>
-        <td><span class="plain">Placement Training</span></td>
+        <td data-periods="7"><span class="plain">Library</span></td>
+        <td data-periods="8"><span class="plain">Placement Training</span></td>
       </tr>
 
       <!-- WEDNESDAY -->
-      <tr>
+      <tr data-day="wed">
         <th>WED</th>
-        <td colspan="2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
+        <td colspan="2" data-periods="1,2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
-        <td><span class="plain oe">Open Elective</span></td>
+        <td data-periods="3"><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td data-periods="4"><span class="plain oe">Open Elective</span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
-        <td><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
+        <td data-periods="5"><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td data-periods="6"><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
-        <td><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
+        <td data-periods="7"><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
+        <td data-periods="8"><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
       </tr>
 
       <!-- THURSDAY -->
-      <tr>
+      <tr data-day="thu">
         <th>THU</th>
-        <td><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
-        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td data-periods="1"><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
+        <td data-periods="2"><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
-        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td data-periods="3"><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
+        <td data-periods="4"><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
         <td class="brk"></td>
-        <td colspan="2"><span class="chip" style="background:var(--c-lab)"><span class="name">Database Mgmt System — Lab</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
+        <td colspan="2" data-periods="5,6"><span class="chip" style="background:var(--c-lab)"><span class="name">Database Mgmt System — Lab</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
         <td class="brk"></td>
-        <td><span class="plain">Mentoring</span></td>
-        <td><span class="plain">Club Activity</span></td>
+        <td data-periods="7"><span class="plain">Mentoring</span></td>
+        <td data-periods="8"><span class="plain">Club Activity</span></td>
       </tr>
 
       <!-- FRIDAY -->
-      <tr>
+      <tr data-day="fri">
         <th>FRI</th>
-        <td><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
-        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td data-periods="1"><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
+        <td data-periods="2"><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
-        <td><span class="plain oe">Open Elective</span></td>
+        <td data-periods="3"><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
+        <td data-periods="4"><span class="plain oe">Open Elective</span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
-        <td><span class="plain">Club Activity</span></td>
+        <td data-periods="5"><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
+        <td data-periods="6"><span class="plain">Club Activity</span></td>
         <td class="brk"></td>
-        <td><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
-        <td><span class="plain">Club Activity</span></td>
+        <td data-periods="7"><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
+        <td data-periods="8"><span class="plain">Club Activity</span></td>
       </tr>
 
       <!-- SATURDAY -->
-      <tr>
+      <tr data-day="sat">
         <th>SAT</th>
-        <td><span class="plain">Club Activity</span></td>
-        <td><span class="plain">Club Activity</span></td>
+        <td data-periods="1"><span class="plain">Club Activity</span></td>
+        <td data-periods="2"><span class="plain">Club Activity</span></td>
         <td class="brk"></td>
-        <td><span class="plain">Club Activity</span></td>
-        <td><span class="plain">Club Activity</span></td>
+        <td data-periods="3"><span class="plain">Club Activity</span></td>
+        <td data-periods="4"><span class="plain">Club Activity</span></td>
         <td class="brk"></td>
-        <td><span class="plain">Club Activity</span></td>
-        <td><span class="plain">Club Activity</span></td>
+        <td data-periods="5"><span class="plain">Club Activity</span></td>
+        <td data-periods="6"><span class="plain">Club Activity</span></td>
         <td class="brk"></td>
-        <td colspan="2"><span class="plain">Club Activity</span></td>
+        <td colspan="2" data-periods="7,8"><span class="plain">Club Activity</span></td>
       </tr>
 
     </tbody>
@@ -1388,6 +1532,201 @@
       installBtn.classList.remove('show');
     });
   })();
+</script>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+// Today highlight · live class indicator · reminders · dark mode
+(function(){
+  var DAY_KEYS=['sun','mon','tue','wed','thu','fri','sat'];
+  // period start/end in minutes after midnight
+  var PERIODS=[[540,590],[590,640],[650,700],[700,750],[790,840],[840,890],[900,945],[945,990]];
+  var LEAD_MIN=10;
+
+  var banner=document.getElementById('statusBanner');
+  var labelEl=document.getElementById('statusLabel');
+  var textEl=document.getElementById('statusText');
+  var remindersBtn=document.getElementById('remindersBtn');
+  var themeBtn=document.getElementById('themeBtn');
+  var toastEl=document.getElementById('toast');
+  var root=document.documentElement;
+  var themeMeta=document.querySelector('meta[name="theme-color"]');
+
+  var todayKey='', dateStamp='', cells=[];
+  var remindersOn=false;
+
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function pad(n){ return n<10?'0'+n:''+n; }
+  function fmt(m){ var h=Math.floor(m/60), mm=m%60, ap=h>=12?'PM':'AM', h12=h%12; if(h12===0)h12=12; return h12+':'+pad(mm)+' '+ap; }
+  function dur(m){ if(m<60) return m+' min'; var h=Math.floor(m/60), r=m%60; return h+' h'+(r?' '+r+' min':''); }
+
+  var toastTimer;
+  function toast(msg){
+    toastEl.textContent=msg; toastEl.classList.add('show');
+    clearTimeout(toastTimer); toastTimer=setTimeout(function(){ toastEl.classList.remove('show'); },3800);
+  }
+
+  /* ---------- today row + schedule cells ---------- */
+  function setup(){
+    var d=new Date(); todayKey=DAY_KEYS[d.getDay()]; dateStamp=d.toDateString();
+    document.querySelectorAll('.table-wrap tbody tr').forEach(function(tr){
+      tr.classList.remove('today-row');
+      var b=tr.querySelector('.today-badge'); if(b) b.remove();
+    });
+    cells=[];
+    var row=document.querySelector('.table-wrap tbody tr[data-day="'+todayKey+'"]');
+    if(!row) return null;
+    row.classList.add('today-row');
+    var badge=document.createElement('span'); badge.className='today-badge'; badge.textContent='TODAY';
+    row.querySelector('th').appendChild(badge);
+    row.querySelectorAll('td[data-periods]').forEach(function(td){
+      var ps=td.getAttribute('data-periods').split(',').map(Number);
+      var first=PERIODS[ps[0]-1], last=PERIODS[ps[ps.length-1]-1];
+      var chip=td.querySelector('.chip'), plain=td.querySelector('.plain');
+      var nameEl=chip?chip.querySelector('.name'):null;
+      var facEl=chip?chip.querySelector('.fac'):null;
+      var roomEl=chip?chip.querySelector('.room'):null;
+      cells.push({
+        el:chip||plain, start:first[0], end:last[1],
+        name:nameEl?nameEl.textContent.trim():(plain?plain.textContent.trim():'Class'),
+        fac:facEl?facEl.textContent.trim():'', room:roomEl?roomEl.textContent.trim():'',
+        subject:!!chip
+      });
+    });
+    return row;
+  }
+
+  /* ---------- live status ---------- */
+  function setBanner(kind,lbl,msg){ banner.className='status-banner '+kind; labelEl.textContent=lbl; textEl.textContent=msg; }
+
+  function tick(){
+    if(new Date().toDateString()!==dateStamp) setup();
+    document.querySelectorAll('.live-now').forEach(function(e){ e.classList.remove('live-now'); });
+    var now=new Date(), nowMin=now.getHours()*60+now.getMinutes();
+    if(!cells.length){ setBanner('done','Today','No classes today — enjoy your day off.'); return; }
+    var active=null, next=null, i;
+    for(i=0;i<cells.length;i++){ if(nowMin>=cells[i].start && nowMin<cells[i].end){ active=cells[i]; break; } }
+    for(i=0;i<cells.length;i++){ if(cells[i].start>nowMin){ next=cells[i]; break; } }
+    if(active){
+      active.el.classList.add('live-now');
+      setBanner('live','Live now', active.name+' · ends '+fmt(active.end)+' ('+dur(active.end-nowMin)+' left)');
+    } else if(next){
+      setBanner('next','Up next', next.name+' at '+fmt(next.start)+' · in '+dur(next.start-nowMin));
+    } else {
+      setBanner('done','Done',"That's it for today — no more classes.");
+    }
+    checkReminders(nowMin);
+  }
+
+  /* ---------- reminders ---------- */
+  function loadNotified(){
+    try{ var o=JSON.parse(read('svyasa_notified')||'{}'); if(o.date===dateStamp) return o.keys||[]; }catch(e){}
+    return [];
+  }
+  function notify(title,body,tag){
+    var opts={body:body, icon:'icon-192.png', badge:'icon-192.png', tag:tag};
+    function direct(){ try{ new Notification(title,opts); }catch(e){} }
+    if('serviceWorker' in navigator && navigator.serviceWorker.getRegistration){
+      navigator.serviceWorker.getRegistration().then(function(reg){
+        if(reg && reg.showNotification){ reg.showNotification(title,opts); } else { direct(); }
+      }).catch(direct);
+    } else { direct(); }
+  }
+  function checkReminders(nowMin){
+    if(!remindersOn || typeof Notification==='undefined' || Notification.permission!=='granted') return;
+    var keys=loadNotified(), changed=false;
+    cells.forEach(function(c,i){
+      if(!c.subject) return;
+      if(i>0 && cells[i-1].name===c.name) return;      // back-to-back same subject: remind once
+      var diff=c.start-nowMin, key=todayKey+'-'+c.start;
+      if(diff>0 && diff<=LEAD_MIN && keys.indexOf(key)===-1){
+        keys.push(key); changed=true;
+        var bits=[c.fac,c.room].filter(Boolean).join(' · ');
+        notify(c.name+' starts in '+diff+' min','At '+fmt(c.start)+(bits?' · '+bits:''),key);
+      }
+    });
+    if(changed) store('svyasa_notified',JSON.stringify({date:dateStamp,keys:keys}));
+  }
+  function paintReminders(){
+    remindersBtn.classList.toggle('active',remindersOn);
+    remindersBtn.setAttribute('aria-pressed',remindersOn?'true':'false');
+    remindersBtn.title=remindersOn?'Class reminders: on':'Class reminders: off';
+  }
+  remindersBtn.addEventListener('click',function(){
+    if(typeof Notification==='undefined'){
+      toast("This browser can't show notifications. On iPhone, add the app to your Home Screen first.");
+      return;
+    }
+    if(remindersOn){ remindersOn=false; store('svyasa_reminders','0'); paintReminders(); toast('Reminders off'); return; }
+    if(Notification.permission==='denied'){
+      toast('Notifications are blocked for this site — allow them in your browser settings, then try again.');
+      return;
+    }
+    var done=false;
+    function handle(perm){
+      if(done) return; done=true;
+      if(perm==='granted'){
+        remindersOn=true; store('svyasa_reminders','1'); paintReminders();
+        toast('Reminders on — '+LEAD_MIN+' min before each class, while the app is open.');
+        tick();
+      } else {
+        toast('Permission not granted, so reminders stay off.');
+      }
+    }
+    try{
+      var r=Notification.requestPermission(handle);
+      if(r && r.then) r.then(handle);
+    }catch(e){ toast('Could not request notification permission.'); }
+  });
+
+  /* ---------- dark mode ---------- */
+  function applyTheme(t){
+    if(t==='dark'){ root.setAttribute('data-theme','dark'); if(themeMeta) themeMeta.setAttribute('content','#150F0D'); }
+    else { root.removeAttribute('data-theme'); if(themeMeta) themeMeta.setAttribute('content','#7A1F2B'); }
+    themeBtn.setAttribute('aria-pressed',t==='dark'?'true':'false');
+    themeBtn.title=t==='dark'?'Switch to light mode':'Switch to dark mode';
+  }
+  themeBtn.addEventListener('click',function(){
+    var next=root.getAttribute('data-theme')==='dark'?'light':'dark';
+    store('svyasa_theme',next); applyTheme(next);
+  });
+  if(window.matchMedia){
+    var mq=matchMedia('(prefers-color-scheme: dark)');
+    var follow=function(e){ if(!read('svyasa_theme')) applyTheme(e.matches?'dark':'light'); };
+    if(mq.addEventListener) mq.addEventListener('change',follow); else if(mq.addListener) mq.addListener(follow);
+  }
+  applyTheme(root.getAttribute('data-theme')==='dark'?'dark':'light');
+
+  /* ---------- start ---------- */
+  remindersOn = read('svyasa_reminders')==='1' && typeof Notification!=='undefined' && Notification.permission==='granted';
+  paintReminders();
+  var row=setup();
+  tick();
+  setInterval(tick,20000);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) tick(); });
+
+  // once the loading screen is gone, bring today's row into view if it's off-screen
+  if(row){
+    var tries=0, wait=setInterval(function(){
+      tries++;
+      if(!root.classList.contains('is-loading') || tries>75){
+        clearInterval(wait);
+        setTimeout(function(){
+          var r=row.getBoundingClientRect();
+          if(r.top<60 || r.bottom>window.innerHeight-20){
+            var reduce=window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // keep the status banner in view when possible, but never hide today's row
+            var bTop=banner.getBoundingClientRect().top+window.scrollY-8;
+            var rowBottom=r.bottom+window.scrollY;
+            var y=Math.max(bTop, rowBottom-window.innerHeight+24);
+            window.scrollTo({top:Math.max(0,y), behavior:reduce?'auto':'smooth'});
+          }
+        },500);
+      }
+    },200);
+  }
+})();
 </script>
 </body>
 </html>
