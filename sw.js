@@ -1,7 +1,8 @@
-const CACHE_NAME = 'svyasa-timetable-v3';
+const CACHE_NAME = 'svyasa-timetable-v4';
 const CORE_ASSETS = [
   './',
   './index.html',
+  './timetables.js',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
@@ -33,7 +34,7 @@ self.addEventListener('fetch', function(event){
   if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
-    caches.match(event.request).then(function(cached){
+    caches.match(event.request, event.request.mode==='navigate' ? {ignoreSearch:true} : undefined).then(function(cached){
       var networkFetch = fetch(event.request).then(function(response){
         if(response && response.status === 200){
           var copy = response.clone();

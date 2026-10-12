@@ -816,6 +816,69 @@
     .chip.live-now, .status-banner.live .status-dot{animation:none;}
   }
 
+  /* ---------- SECTION SWITCHER ---------- */
+  .section-btn{
+    position:relative; z-index:3;
+    margin-top:12px;
+    display:inline-flex; align-items:center; gap:8px;
+    padding:8px 14px; border-radius:999px;
+    background:rgba(255,255,255,0.12);
+    border:1px solid rgba(232,200,138,0.5);
+    color:#F3E7D3;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px;
+    cursor:pointer; max-width:100%;
+    transition:background .15s ease, transform .15s ease;
+  }
+  .section-btn:hover{background:rgba(255,255,255,0.22);}
+  .section-btn:active{transform:scale(.97);}
+  .section-btn svg{width:15px; height:15px; flex:none;}
+  .section-btn .section-chevron{width:13px; height:13px; opacity:.85;}
+  .section-btn.static{cursor:default; pointer-events:none;}
+  .section-btn.static .section-chevron{display:none;}
+
+  .section-card{max-width:400px; max-height:min(82dvh,640px); overflow-y:auto; -webkit-overflow-scrolling:touch;}
+  .section-group{
+    font-family:'Space Mono',monospace; font-size:10px; letter-spacing:1.5px;
+    text-transform:uppercase; color:var(--slate); margin:16px 0 8px;
+  }
+  .section-group:first-child{margin-top:0;}
+  .section-list{display:flex; flex-direction:column; gap:8px;}
+  .section-item{
+    display:flex; align-items:center; gap:12px;
+    width:100%; text-align:left;
+    appearance:none; -webkit-appearance:none; font:inherit;
+    min-height:54px; padding:11px 13px; border-radius:12px;
+    background:#F9F4EB; color:var(--ink);
+    border:1px solid var(--line); cursor:pointer;
+    -webkit-touch-callout:none;
+    transition:background .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .section-item:hover{background:#F3E8D4; border-color:#E0CFAE;}
+  .section-item:active{transform:scale(.99);}
+  .section-item.selected{border-color:var(--maroon); box-shadow:inset 0 0 0 1px var(--maroon);}
+  .section-item-text{flex:1; min-width:0; display:block;}
+  .section-item-label{display:block; font-family:'Poppins',sans-serif; font-weight:600; font-size:13.5px;}
+  .section-item-sub{display:block; font-size:11px; color:var(--slate); margin-top:1px;}
+  .section-check{flex:none; width:18px; height:18px; color:var(--maroon); opacity:0;}
+  .section-item.selected .section-check{opacity:1;}
+  .section-copy{
+    margin-top:16px; width:100%; min-height:44px;
+    appearance:none; -webkit-appearance:none; font:inherit;
+    font-family:'Poppins',sans-serif; font-weight:600; font-size:12.5px;
+    color:var(--maroon-deep); background:transparent;
+    border:1px dashed #D9C39A; border-radius:12px; cursor:pointer;
+  }
+  .section-copy:hover{background:#F6ECDD;}
+  @media (max-width:720px){
+    .section-overlay{align-items:flex-end; padding:0;}
+    .section-overlay .section-card{
+      max-width:none; border-radius:20px 20px 0 0;
+      padding-bottom:calc(22px + env(safe-area-inset-bottom));
+      transform:translateY(28px);
+    }
+    .section-overlay.open .section-card{transform:translateY(0);}
+  }
+
   /* ---------- DARK THEME ---------- */
   :root[data-theme="dark"]{
     color-scheme:dark;
@@ -859,6 +922,12 @@
   [data-theme="dark"] .viewer-body{background:#150F0D;}
   [data-theme="dark"] .viewer-fallback{background:#241B18;}
   [data-theme="dark"] .viewer-fallback a{color:#E8C88A;}
+  [data-theme="dark"] .section-item{background:#2E241F;}
+  [data-theme="dark"] .section-item:hover{background:#392C25; border-color:#4D3C32;}
+  [data-theme="dark"] .section-item.selected{border-color:var(--gold); box-shadow:inset 0 0 0 1px var(--gold);}
+  [data-theme="dark"] .section-check{color:var(--gold);}
+  [data-theme="dark"] .section-copy{color:#E8C88A; border-color:#5A4527;}
+  [data-theme="dark"] .section-copy:hover{background:#2E241F;}
 </style>
 </head>
 <body>
@@ -908,14 +977,19 @@
     </div>
     <h1>Class Time Table</h1>
     <div class="sub">School of Engineering &amp; Technology — Swami Vivekananda Yoga Anusandhana Samsthana</div>
+    <button type="button" class="section-btn static" id="sectionBtn" aria-haspopup="dialog" aria-label="Choose your section">
+      <svg class="section-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+      <span id="sectionBtnLabel">V Sem · CSE · Sec-E</span>
+      <svg class="section-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
 
     <div class="meta-grid">
-      <div>Semester<strong>V Semester</strong></div>
-      <div>Academic Year<strong>2026 – 2027 (Odd)</strong></div>
-      <div>Specialization<strong>CSE (General) · Sec-E</strong></div>
-      <div>Classroom No.<strong>F-16</strong></div>
-      <div>W.E.F<strong>10 / 08 / 2026</strong></div>
-      <div>Duration<strong>Aug '26 – Dec '26</strong></div>
+      <div>Semester<strong data-meta="semester">V Semester</strong></div>
+      <div>Academic Year<strong data-meta="year">2026 – 2027 (Odd)</strong></div>
+      <div>Specialization<strong data-meta="specialization">CSE (General) · Sec-E</strong></div>
+      <div>Classroom No.<strong data-meta="classroom">F-16</strong></div>
+      <div>W.E.F<strong data-meta="wef">10 / 08 / 2026</strong></div>
+      <div>Duration<strong data-meta="duration">Aug '26 – Dec '26</strong></div>
     </div>
   </header>
 
@@ -948,101 +1022,7 @@
         <th>3.45<span class="time">3.45 – 4.30</span></th>
       </tr>
     </thead>
-    <tbody>
-
-      <!-- MONDAY -->
-      <tr data-day="mon">
-        <th>MON</th>
-        <td data-periods="1"><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
-        <td data-periods="2"><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="3"><span class="plain">Mentoring</span></td>
-        <td data-periods="4"><span class="plain oe">Open Elective</span></td>
-        <td class="brk"></td>
-        <td colspan="2" data-periods="5,6"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Mr. Vivek Yadav</span><span class="room">F-16</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="7"><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
-        <td data-periods="8"><span class="plain">Placement Training</span></td>
-      </tr>
-
-      <!-- TUESDAY -->
-      <tr data-day="tue">
-        <th>TUE</th>
-        <td data-periods="1"><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
-        <td data-periods="2"><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="3"><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
-        <td data-periods="4"><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="5"><span class="chip" style="background:var(--c-dbms)"><span class="name">Database Mgmt System</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
-        <td data-periods="6"><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="7"><span class="plain">Library</span></td>
-        <td data-periods="8"><span class="plain">Placement Training</span></td>
-      </tr>
-
-      <!-- WEDNESDAY -->
-      <tr data-day="wed">
-        <th>WED</th>
-        <td colspan="2" data-periods="1,2"><span class="chip" style="background:var(--c-bda)"><span class="name">Big Data Analytics</span><span class="fac">Ms. Nandini / Sugandh Kumar</span><span class="room">F-16</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="3"><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
-        <td data-periods="4"><span class="plain oe">Open Elective</span></td>
-        <td class="brk"></td>
-        <td data-periods="5"><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
-        <td data-periods="6"><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="7"><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
-        <td data-periods="8"><span class="chip" style="background:var(--c-aps)"><span class="name">Aptitude &amp; Professional Skills</span><span class="fac">Mr. Mrutyunjay S Navalagatti</span><span class="room">FF-05</span></span></td>
-      </tr>
-
-      <!-- THURSDAY -->
-      <tr data-day="thu">
-        <th>THU</th>
-        <td data-periods="1"><span class="chip" style="background:var(--c-ds)"><span class="name">Distributed Systems</span><span class="fac">Mr. Himanshu Sahu</span></span></td>
-        <td data-periods="2"><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="3"><span class="chip" style="background:var(--c-mgmt)"><span class="name">Business Essentials for Engineers</span><span class="fac">Ms. Savitha</span></span></td>
-        <td data-periods="4"><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
-        <td class="brk"></td>
-        <td colspan="2" data-periods="5,6"><span class="chip" style="background:var(--c-lab)"><span class="name">Database Mgmt System — Lab</span><span class="fac">Mr Mohan Gowda G S</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="7"><span class="plain">Mentoring</span></td>
-        <td data-periods="8"><span class="plain">Club Activity</span></td>
-      </tr>
-
-      <!-- FRIDAY -->
-      <tr data-day="fri">
-        <th>FRI</th>
-        <td data-periods="1"><span class="chip" style="background:var(--c-nms)"><span class="name">Network Mgmt Systems</span><span class="fac">Dr. Naveen N</span><span class="room">F-16</span></span></td>
-        <td data-periods="2"><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
-        <td class="brk"></td>
-        <td data-periods="3"><span class="chip" style="background:var(--c-ai)"><span class="name">Artificial Intelligence</span><span class="fac">Ms Nidhi Singh</span></span></td>
-        <td data-periods="4"><span class="plain oe">Open Elective</span></td>
-        <td class="brk"></td>
-        <td data-periods="5"><span class="chip" style="background:var(--c-toc)"><span class="name">Theory of Computation</span><span class="fac">Dr Ramkumar P</span></span></td>
-        <td data-periods="6"><span class="plain">Club Activity</span></td>
-        <td class="brk"></td>
-        <td data-periods="7"><span class="chip" style="background:var(--c-dwm)"><span class="name">Data Warehousing &amp; Mining</span><span class="fac">Dr. R Nandhi Kesavan</span><span class="room">F-16</span></span></td>
-        <td data-periods="8"><span class="plain">Club Activity</span></td>
-      </tr>
-
-      <!-- SATURDAY -->
-      <tr data-day="sat">
-        <th>SAT</th>
-        <td data-periods="1"><span class="plain">Club Activity</span></td>
-        <td data-periods="2"><span class="plain">Club Activity</span></td>
-        <td class="brk"></td>
-        <td data-periods="3"><span class="plain">Club Activity</span></td>
-        <td data-periods="4"><span class="plain">Club Activity</span></td>
-        <td class="brk"></td>
-        <td data-periods="5"><span class="plain">Club Activity</span></td>
-        <td data-periods="6"><span class="plain">Club Activity</span></td>
-        <td class="brk"></td>
-        <td colspan="2" data-periods="7,8"><span class="plain">Club Activity</span></td>
-      </tr>
-
-    </tbody>
+    <tbody id="scheduleBody"></tbody>
   </table>
   </div>
   <div class="empty-note">Shaded diagonal columns mark short breaks between periods (10.40–10.50 &amp; 12.30–1.10, and 2.50–3.00).</div>
@@ -1053,18 +1033,7 @@
       <thead>
         <tr><th>Course</th><th>Faculty</th></tr>
       </thead>
-      <tbody>
-        <tr><td><span class="swatch" style="background:var(--c-ai)"></span>Artificial Intelligence</td><td>Ms Nidhi Singh</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-toc)"></span>Theory of Computation</td><td>Dr Ramkumar P</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-bda)"></span>Big Data Analytics</td><td>Ms. Nandini / Sugandh Kumar</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-ds)"></span>Distributed Systems</td><td>Mr. Himanshu Sahu</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-nms)"></span>Network Management Systems</td><td>Dr. Naveen N</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-dbms)"></span>Database Management System</td><td><strong>Mr Mohan Gowda G S</strong></td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-dwm)"></span>Introduction to Data Warehousing &amp; Data Mining</td><td>Dr. R Nandhi Kesavan</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-mgmt)"></span>Business Essentials for Engineers</td><td>Ms. Savitha</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-lab)"></span>Database Management System — Lab</td><td>Mr Mohan Gowda G S</td></tr>
-        <tr><td><span class="swatch" style="background:var(--c-aps)"></span>Aptitude &amp; Professional Skills</td><td>Mr. Mrutyunjay S Navalagatti</td></tr>
-      </tbody>
+      <tbody id="directoryBody"></tbody>
     </table>
   </div>
 
@@ -1155,6 +1124,193 @@
     <div class="viewer-fallback">Not loading? <a id="viewerFallbackLink" href="#" target="_blank" rel="noopener">Open in Google Docs</a></div>
   </div>
 </div>
+
+<div class="modal-overlay section-overlay" id="sectionSheet" role="dialog" aria-modal="true" aria-labelledby="sectionSheetTitle">
+  <div class="modal-card section-card">
+    <button class="modal-close" id="sectionClose" aria-label="Close">&times;</button>
+    <p class="modal-section-label">Your class</p>
+    <h3 id="sectionSheetTitle">Switch section</h3>
+    <p class="modal-fac">Timetable, live status and reminders follow your choice. It is remembered on this device.</p>
+    <div id="sectionList"></div>
+    <button type="button" class="section-copy" id="sectionCopy">Copy link to this section</button>
+  </div>
+</div>
+
+<script src="timetables.js"></script>
+<script>
+// Multi-section timetable: draws the chosen class from timetables.js
+(function(){
+  var DAYS=[['mon','MON'],['tue','TUE'],['wed','WED'],['thu','THU'],['fri','FRI'],['sat','SAT']];
+  var BREAK_AFTER={2:1,4:1,6:1};
+  var T=window.TIMETABLES;
+  var root=document.documentElement;
+  var body=document.getElementById('scheduleBody');
+  var dirBody=document.getElementById('directoryBody');
+  var btn=document.getElementById('sectionBtn');
+  var btnLabel=document.getElementById('sectionBtnLabel');
+  var sheet=document.getElementById('sectionSheet');
+  var sheetTitle=document.getElementById('sectionSheetTitle');
+  var listEl=document.getElementById('sectionList');
+  var closeBtn=document.getElementById('sectionClose');
+  var copyBtn=document.getElementById('sectionCopy');
+  var KEY='svyasa_class';
+  var classes=(T&&T.classes)||[];
+  var subjects={}, order=[], current=null, needsChoice=false;
+
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function say(m){ if(window.__toast) window.__toast(m); }
+
+  if(!classes.length){
+    body.innerHTML='<tr><td colspan="12" style="padding:30px 16px;text-align:center;color:var(--slate)">Could not load the timetable data. Check your connection and refresh.</td></tr>';
+    btn.style.display='none';
+    return;
+  }
+  (T.subjects||[]).forEach(function(s){ subjects[s.id]=s; order.push(s.id); });
+
+  function cellHtml(c,cls){
+    if(c.s){
+      var sub=subjects[c.s];
+      if(!sub) return '<span class="plain">'+esc(c.s)+'</span>';
+      var fac=c.f||(cls.faculty&&cls.faculty[c.s])||sub.faculty||'';
+      return '<span class="chip" tabindex="0" role="button" style="background:'+esc(sub.color)+'"><span class="name">'+esc(sub.name)+'</span>'+
+        (fac?'<span class="fac">'+esc(fac)+'</span>':'')+(c.r?'<span class="room">'+esc(c.r)+'</span>':'')+'</span>';
+    }
+    return '<span class="plain'+(c.k==='oe'?' oe':'')+'">'+esc(c.t)+'</span>';
+  }
+
+  function render(cls){
+    current=cls;
+    var used={}, html='';
+    DAYS.forEach(function(d){
+      var cells=cls.days&&cls.days[d[0]];
+      if(!cells) return;
+      var p=1, row='';
+      cells.forEach(function(c){
+        var span=c.span||1, ps=[], i, end=p+span-1, colspan=span;
+        for(i=0;i<span;i++) ps.push(p+i);
+        for(i=p;i<end;i++) if(BREAK_AFTER[i]) colspan++;
+        if(c.s) used[c.s]=1;
+        row+='<td'+(colspan>1?' colspan="'+colspan+'"':'')+' data-periods="'+ps.join(',')+'">'+cellHtml(c,cls)+'</td>';
+        if(BREAK_AFTER[end] && end<8) row+='<td class="brk"></td>';
+        p+=span;
+      });
+      if(p!==9){
+        if(window.console) console.error('Timetable data: '+cls.id+' '+d[0]+' covers '+(p-1)+' periods, expected 8');
+        row='<td colspan="11" style="padding:14px;color:#D64545;text-align:center">Timetable data error: '+d[1]+' covers '+(p-1)+' periods instead of 8.</td>';
+      }
+      html+='<tr data-day="'+d[0]+'"><th>'+d[1]+'</th>'+row+'</tr>';
+    });
+    body.innerHTML=html;
+
+    dirBody.innerHTML=order.filter(function(id){ return used[id]; }).map(function(id){
+      var s=subjects[id], fac=(cls.faculty&&cls.faculty[id])||s.faculty||'';
+      return '<tr><td><span class="swatch" style="background:'+esc(s.color)+'"></span>'+esc(s.full||s.name)+'</td><td>'+(s.bold?'<strong>'+esc(fac)+'</strong>':esc(fac))+'</td></tr>';
+    }).join('');
+
+    document.querySelectorAll('[data-meta]').forEach(function(el){ el.textContent=cls[el.getAttribute('data-meta')]||'—'; });
+    document.title='S-VYASA | Class Time Table — '+(cls.title||cls.label);
+    btnLabel.textContent=cls.label;
+    root.setAttribute('data-class-id',cls.id);
+    document.dispatchEvent(new CustomEvent('timetable:rendered',{detail:{id:cls.id}}));
+  }
+
+  function findClass(key){
+    if(!key) return null; key=String(key).toLowerCase();
+    for(var i=0;i<classes.length;i++){
+      var c=classes[i];
+      if(c.id.toLowerCase()===key) return c;
+      if((c.aliases||[]).some(function(a){ return String(a).toLowerCase()===key; })) return c;
+    }
+    return null;
+  }
+
+  /* ---------- chooser sheet ---------- */
+  function buildList(){
+    var groups=[], map={};
+    classes.forEach(function(c){
+      var g=c.group||'Classes';
+      if(!map[g]){ map[g]={name:g,items:[]}; groups.push(map[g]); }
+      map[g].items.push(c);
+    });
+    listEl.innerHTML=groups.map(function(g){
+      return '<div class="section-group">'+esc(g.name)+'</div><div class="section-list">'+g.items.map(function(c){
+        var sel=c===current;
+        return '<button type="button" class="section-item'+(sel?' selected':'')+'" data-id="'+esc(c.id)+'" aria-pressed="'+(sel?'true':'false')+'">'+
+          '<span class="section-item-text"><span class="section-item-label">'+esc(c.label)+'</span>'+
+          '<span class="section-item-sub">Room '+esc(c.classroom||'—')+' · '+esc(c.year||'')+'</span></span>'+
+          '<svg class="section-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></button>';
+      }).join('')+'</div>';
+    }).join('');
+  }
+  function openSheet(){
+    if(classes.length<2) return;
+    buildList();
+    sheetTitle.textContent=needsChoice?'Choose your section':'Switch section';
+    sheet.classList.add('open');
+    var sel=listEl.querySelector('.selected')||listEl.querySelector('.section-item');
+    if(sel) sel.focus();
+  }
+  function closeSheet(){ sheet.classList.remove('open'); }
+
+  function setUrl(id){
+    try{
+      var u=new URL(location.href); u.searchParams.set('s',id);
+      history.replaceState(history.state,'',u.pathname+u.search+u.hash);
+    }catch(e){}
+  }
+  function choose(id){
+    var c=findClass(id); if(!c) return;
+    needsChoice=false;
+    if(c!==current) render(c);
+    store(KEY,c.id); setUrl(c.id);
+    closeSheet();
+    say('Showing '+c.label);
+  }
+  function shareUrl(){
+    try{ var u=new URL(location.href); u.hash=''; u.searchParams.set('s',current.id); return u.toString(); }catch(e){ return location.href; }
+  }
+
+  btn.addEventListener('click',openSheet);
+  closeBtn.addEventListener('click',closeSheet);
+  sheet.addEventListener('click',function(e){ if(e.target===sheet) closeSheet(); });
+  listEl.addEventListener('click',function(e){
+    var it=e.target.closest('.section-item'); if(it) choose(it.getAttribute('data-id'));
+  });
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeSheet(); });
+  copyBtn.addEventListener('click',function(){
+    var url=shareUrl();
+    function done(ok){ say(ok?'Link copied — anyone who opens it lands on '+current.label:'Copy this link: '+url); }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ done(true); },function(){ done(false); });
+    } else {
+      try{
+        var ta=document.createElement('textarea'); ta.value=url; ta.style.position='fixed'; ta.style.opacity='0';
+        document.body.appendChild(ta); ta.select(); var ok=document.execCommand('copy'); ta.remove(); done(ok);
+      }catch(err){ done(false); }
+    }
+  });
+
+  /* ---------- pick the starting class ---------- */
+  var param=null;
+  try{ param=new URLSearchParams(location.search).get('s'); }catch(e){}
+  var fromUrl=findClass(param), fromStore=findClass(read(KEY));
+  var chosen=fromUrl||fromStore||(classes.length===1?classes[0]:null);
+  needsChoice=!chosen;
+  render(chosen||classes[0]);
+  if(fromUrl) store(KEY,fromUrl.id);
+  if(classes.length>1){ btn.classList.remove('static'); }
+
+  // first visit with several sections: ask once the loading screen is gone
+  if(needsChoice){
+    var tries=0, wait=setInterval(function(){
+      tries++;
+      if(!root.classList.contains('is-loading') || tries>75){ clearInterval(wait); setTimeout(openSheet,350); }
+    },200);
+  }
+})();
+</script>
 
 <script>
   // Hide the "swipe to see the full week" hint once the user has scrolled the table
@@ -1304,6 +1460,10 @@
     }
   };
 
+  function defaultRes(){
+    return { modules: [1,2,3,4,5].map(function(n){ return { name: "Module " + n, url: "" }; }), qb: "" };
+  }
+
   (function(){
     var modal = document.getElementById('resourceModal');
     var closeBtn = document.getElementById('modalCloseBtn');
@@ -1367,7 +1527,7 @@
       currentFac = fac;
       currentColor = color;
 
-      var res = courseResources[name] || { modules: [], qb: "" };
+      var res = courseResources[name] || defaultRes();
       var addedCount = (res.modules || []).filter(function(m){ return m.url; }).length + (res.qb ? 1 : 0);
 
       nameEl.textContent = name;
@@ -1436,7 +1596,7 @@
     }
 
     function openNotesPage(){
-      var res = courseResources[currentSubject] || { modules: [], qb: "" };
+      var res = courseResources[currentSubject] || defaultRes();
 
       notesPageTitle.textContent = currentSubject;
       notesPageFac.textContent = currentFac;
@@ -1472,13 +1632,13 @@
       notesPage.classList.remove('open');
     }
 
-    document.querySelectorAll('.chip').forEach(function(chip){
-      chip.setAttribute('tabindex','0');
-      chip.setAttribute('role','button');
-      chip.addEventListener('click', function(){ openModal(chip); });
-      chip.addEventListener('keydown', function(e){
-        if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openModal(chip); }
-      });
+    var scheduleWrap = document.querySelector('.table-wrap');
+    scheduleWrap.addEventListener('click', function(e){
+      var chip = e.target.closest('.chip'); if(chip) openModal(chip);
+    });
+    scheduleWrap.addEventListener('keydown', function(e){
+      var chip = e.target.closest('.chip');
+      if(chip && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); openModal(chip); }
     });
 
     notesBtn.addEventListener('click', openNotesPage);
@@ -1639,7 +1799,7 @@
     cells.forEach(function(c,i){
       if(!c.subject) return;
       if(i>0 && cells[i-1].name===c.name) return;      // back-to-back same subject: remind once
-      var diff=c.start-nowMin, key=todayKey+'-'+c.start;
+      var diff=c.start-nowMin, key=(root.getAttribute('data-class-id')||'')+'-'+todayKey+'-'+c.start;
       if(diff>0 && diff<=LEAD_MIN && keys.indexOf(key)===-1){
         keys.push(key); changed=true;
         var bits=[c.fac,c.room].filter(Boolean).join(' · ');
@@ -1697,6 +1857,10 @@
     if(mq.addEventListener) mq.addEventListener('change',follow); else if(mq.addListener) mq.addListener(follow);
   }
   applyTheme(root.getAttribute('data-theme')==='dark'?'dark':'light');
+
+  // redraw today/live state whenever the section is switched
+  document.addEventListener('timetable:rendered',function(){ setup(); tick(); });
+  window.__toast=toast;
 
   /* ---------- start ---------- */
   remindersOn = read('svyasa_reminders')==='1' && typeof Notification!=='undefined' && Notification.permission==='granted';
