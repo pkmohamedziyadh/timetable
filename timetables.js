@@ -21,6 +21,11 @@
 window.TIMETABLES = {
   subjects: [
     {id:'ai', name:'Artificial Intelligence', full:'Artificial Intelligence', color:'var(--c-ai)', faculty:'Ms Nidhi Singh'},
+    {id:'cns', name:'Cryptography & Network Security', full:'Cryptography and Network Security', color:'#3F4F8F', faculty:'Dr. Mrutyunjaya M S'},
+    {id:'cnsl', name:'Crypto & Network Security — Lab', full:'Cryptography and Network Security Laboratory', color:'var(--c-lab)', faculty:'Dr. Mrutyunjaya M S / Dr. Vamsi Krishna'},
+    {id:'iot', name:'IoT Security', full:'IoT Security', color:'#8A4A2E', faculty:'Mr. Shine V J'},
+    {id:'bcs', name:'Blockchain Security', full:'Blockchain Security', color:'#5B5F97', faculty:'Ms. Tamizh Arasi G S', bold:true},
+    {id:'isa', name:'InfoSec Analysis & Audit Mgmt', full:'Information Security Analysis and Audit Management', color:'#7A6B2E', faculty:'Dr. Ananda Raj'},
     {id:'toc', name:'Theory of Computation', full:'Theory of Computation', color:'var(--c-toc)', faculty:'Dr Ramkumar P'},
     {id:'bda', name:'Big Data Analytics', full:'Big Data Analytics', color:'var(--c-bda)', faculty:'Ms. Nandini / Sugandh Kumar'},
     {id:'ds', name:'Distributed Systems', full:'Distributed Systems', color:'var(--c-ds)', faculty:'Mr. Himanshu Sahu'},
@@ -101,6 +106,79 @@ window.TIMETABLES = {
         {t:'Club Activity'},
         {t:'Club Activity'},
         {t:'Club Activity', span:2}
+      ]
+      }
+    },
+    {
+      id: 'v-cys-c',
+      aliases: ['sec-c', 'c', 'cys', 'cyber'],
+      label: 'V Sem · Cyber Security · Sec-C',
+      group: 'V Semester · CSE (Cyber Security)',
+      title: 'V Semester CSE Cyber Security (Sec-C)',
+      semester: 'V Semester',
+      year: '2026 – 2027 (Odd)',
+      specialization: 'CSE – Cyber Security · Sec-C',
+      classroom: 'F-09',
+      wef: '10 / 08 / 2026',
+      duration: "Aug '26 – Dec '26",
+      faculty: { toc: 'Ms. Shilpashree S', ds: 'Ms. Nandini K', dbms: 'Dr. Mohan Kumar AV', lab: 'Dr. Mohan Kumar AV' },
+      days: {
+      mon: [
+        {s:'iot'},
+        {s:'bcs'},
+        {s:'cns'},
+        {t:'Open Elective', k:'oe'},
+        {s:'lab', span:2},
+        {t:'Placement Training'},
+        {t:'Club Activity'}
+      ],
+      tue: [
+        {s:'ds'},
+        {s:'toc'},
+        {s:'bcs'},
+        {s:'iot'},
+        {s:'isa'},
+        {t:'Mentoring'},
+        {t:'Placement Training'},
+        {t:'Club Activity'}
+      ],
+      wed: [
+        {s:'iot'},
+        {s:'isa'},
+        {s:'cns'},
+        {t:'Open Elective', k:'oe'},
+        {s:'ds'},
+        {t:'Mentoring'},
+        {t:'Placement Training'},
+        {t:'Library'}
+      ],
+      thu: [
+        {s:'dbms'},
+        {s:'bcs'},
+        {s:'cns'},
+        {s:'toc'},
+        {s:'dbms'},
+        {s:'aps', r:'FF-05'},
+        {s:'aps', r:'FF-05'},
+        {s:'aps', r:'FF-05'}
+      ],
+      fri: [
+        {s:'cnsl', span:2},
+        {s:'toc'},
+        {t:'Open Elective', k:'oe'},
+        {s:'isa'},
+        {s:'ds'},
+        {t:'Club Activity'},
+        {t:'Club Activity'}
+      ],
+      sat: [
+        {t:'Club Activity', span:2},
+        {t:'Club Activity'},
+        {t:'Club Activity'},
+        {t:'Club Activity'},
+        {t:'Club Activity'},
+        {t:'Club Activity'},
+        {t:'Club Activity'}
       ]
       }
     }
